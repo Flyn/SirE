@@ -2,13 +2,15 @@ require "mainchar"
 
 function love.load()
    -- love.graphics.setMode(1280, 720, false, true, 0)
-   tile = love.graphics.newImage("tile.tga")
-   tile:setFilter("nearest","nearest")
+   tileImg = love.graphics.newImage("tile.tga")
+   tileImg:setFilter("nearest","nearest")
    ninjaChar = MainChar.create("ninja")
-   ninjaChar.xpos = 20
+   ninjaChar.xpos = 120
    ninjaChar.ypos = 100
-   tilexpos = 160
-   tileypos = 100
+   tile = {}
+   tile.xpos = 160
+   tile.ypos = 100
+   zoom = false
 end
 
 function love.update(dt)
@@ -18,12 +20,23 @@ function love.update(dt)
    if love.keyboard.isDown("right") then
       ninjaChar:moveRight()
    end
+   ninjaChar:isBumpingTiles({tile})
    
 end
 
+function love.mousereleased(x, y, button)
+	if button == "l" then
+		zoom = not zoom
+	end
+end
+
 function love.draw()
-    love.graphics.print("Ninja physics demo", 400, 300)
+	if zoom then
+		love.graphics.scale(2,2)
+	end
+    love.graphics.print("Ninja physics demo\nLeft/Right to move\nLeft Click to zoom", 400, 300)
     --love.graphics.draw(ninja, xpos, ypos, 0, 1, 1, 20, 20)
+    love.graphics.line(0,ninjaChar.ypos+4,500,ninjaChar.ypos+4)
     ninjaChar:draw()
-    love.graphics.draw(tile, tilexpos, tileypos)
+    love.graphics.draw(tileImg, tile.xpos, tile.ypos)
 end
