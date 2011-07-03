@@ -53,7 +53,7 @@ function love.draw()
 		ground = "no"
 	end
 	love.graphics.print("Ninja physics demo\nLeft/Right to move\nRight Click to zoom\nEscape to quit", 0, 200)
-	love.graphics.print("Speed:"..ninjaChar.xspd.."\nXpos:"..ninjaChar.xpos.."\nYpos"..ninjaChar.ypos.."\nTouch ground:"..ground, 200, 200)
+	love.graphics.print("Speed:"..ninjaChar.grndspd.."\nXpos:"..ninjaChar.xpos.."\nYpos:"..ninjaChar.ypos.."\nTouch ground:"..ground, 200, 200)
 	ninjaChar:draw()
 	love.graphics.draw(tileImg, tile.xpos, tile.ypos)
 	love.graphics.setColor(255,255,0,255)

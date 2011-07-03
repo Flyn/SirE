@@ -12,32 +12,38 @@ function MainChar.create(name)
 	newChar.ypos = 0
 	newChar.acc = 0.046875
 	newChar.dec = 0.5
-	newChar.xspd = 0
-	newChar.maxSpd = 6
+	newChar.grndspd = 0
+	newChar.maxspd = 6
+	newChar.angle = 0
 	newChar.isMoving = false
 	return newChar
 end
 
 function MainChar:moveRight()
 	self.isMoving = true
-	if self.xspd < 0 then
-		self.xspd = self.xspd + 0.5
-	elseif self.xspd < self.maxSpd then
-		self.xspd = self.xspd + self.acc
-		if self.xspd > self.maxSpd then
-			self.xspd = self.maxSpd
-		end
+	if self.angle ~= math.rad(0) then
+		self.grndspd = -self.grndspd
+		self.angle = math.rad(0)
 	end
+	self:run()
 end
 
 function MainChar:moveLeft()
 	self.isMoving = true
-	if self.xspd > 0 then
-		self.xspd = self.xspd - 0.5
-	elseif self.xspd > -self.maxSpd then
-		self.xspd = self.xspd - self.acc
-		if self.xspd < -self.maxSpd then
-			self.xspd = -self.maxSpd
+	if self.angle ~= math.rad(180) then
+		self.grndspd = -self.grndspd
+		self.angle = math.rad(180)
+	end
+	self:run()
+end
+
+function MainChar:run()
+	if self.grndspd < 0 then
+		self.grndspd = self.grndspd + 0.5
+	elseif self.grndspd < self.maxspd then
+		self.grndspd = self.grndspd + self.acc
+		if self.grndspd > self.maxspd then
+			self.grndspd = self.maxspd
 		end
 	end
 end
@@ -45,12 +51,17 @@ end
 function MainChar:updatePos()
 	if not self.isMoving then
 		local sign = 1
-		if self.xspd ~= 0 then
-			sign = (math.abs(self.xspd)/self.xspd)
+		if self.grndspd ~= 0 then
+			sign = (math.abs(self.grndspd)/self.grndspd)
 		end
-		self.xspd = self.xspd - math.min(math.abs(self.xspd), self.acc) * sign
+		self.grndspd = self.grndspd - math.min(math.abs(self.grndspd), self.acc) * sign
 	end
-	self.xpos = self.xpos + self.xspd
+	
+	local xspd = self.grndspd * math.cos(self.angle)
+	local yspd = self.grndspd * -math.sin(self.angle)
+	
+	self.xpos = self.xpos + xspd
+	self.ypos = self.ypos + yspd
 	self.isMoving = false
 end
 
@@ -59,10 +70,10 @@ function MainChar:isBumpingTiles(tiles)
 	for i,tile in ipairs(tiles) do
 		if wallSensorBar:collidingLeft(tile) then
 			self.xpos = tile.xpos+tile.width+11
-			self.xspd = 0
+			self.grndspd = 0
 		elseif wallSensorBar:collidingRight(tile) then
 				self.xpos = tile.xpos-11
-				self.xspd = 0
+				self.grndspd = 0
 		end
 	end
 end
