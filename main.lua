@@ -1,4 +1,4 @@
-require "mainchar"
+require "main_char"
 
 function love.load()
 	--love.graphics.setMode(1280, 720, false, true, 0)
@@ -12,7 +12,7 @@ function love.load()
 	tile.ypos = 100
 	tile.width = 16
 	tile.height = 16
-	zoom = false
+	zoom = true
 end
 
 function love.update(dt)
@@ -47,9 +47,19 @@ function love.draw()
 	if zoom then
 		love.graphics.scale(2,2)
 	end
-	 love.graphics.print("Ninja physics demo\nLeft/Right to move\nRight Click to zoom\nEscape to quit", 0, 200)
-	 love.graphics.print("Speed:"..ninjaChar.xspd.."\nXpos:"..ninjaChar.xpos.."\nYpos"..ninjaChar.ypos, 200, 200)
-	 love.graphics.line(0,ninjaChar.ypos+4,500,ninjaChar.ypos+4)
-	 ninjaChar:draw()
-	 love.graphics.draw(tileImg, tile.xpos, tile.ypos)
+	if ninjaChar:isOnGround({tile}) then
+		ground = "yes"
+	else
+		ground = "no"
+	end
+	love.graphics.print("Ninja physics demo\nLeft/Right to move\nRight Click to zoom\nEscape to quit", 0, 200)
+	love.graphics.print("Speed:"..ninjaChar.xspd.."\nXpos:"..ninjaChar.xpos.."\nYpos"..ninjaChar.ypos.."\nTouch ground:"..ground, 200, 200)
+	ninjaChar:draw()
+	love.graphics.draw(tileImg, tile.xpos, tile.ypos)
+	love.graphics.setColor(255,255,0,255)
+	love.graphics.line(ninjaChar.xpos-9,ninjaChar.ypos,ninjaChar.xpos-9,ninjaChar.ypos+20)
+	love.graphics.line(ninjaChar.xpos+9,ninjaChar.ypos,ninjaChar.xpos+9,ninjaChar.ypos+20)
+	love.graphics.setColor(0,255,0,255)
+	love.graphics.line(ninjaChar.xpos-10,ninjaChar.ypos+4,ninjaChar.xpos+10,ninjaChar.ypos+4)
+	love.graphics.setColor(255,255,255,255)
 end

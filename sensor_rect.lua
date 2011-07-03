@@ -20,6 +20,10 @@ function SensorRect:calculatePos()
 	self.ypos2 = math.ceil(self.parent.ypos + self.rely2)
 end
 
+function SensorRect:isColliding(tile)
+	return (self:collidingLeft(tile) or self:collidingRight(tile) or self:collidingUp(tile) or self:collidingDown(tile))
+end
+
 function SensorRect:collidingLeft(tile)
 	self:calculatePos()
 	tilexpos2 = (tile.xpos + tile.width)
@@ -38,6 +42,30 @@ function SensorRect:collidingRight(tile)
 	tileypos2 = (tile.ypos + tile.height)
 	if (self.ypos > tile.ypos and self.ypos < tileypos2) or (self.ypos2 > tile.ypos and self.ypos2 < tileypos2) then
 		if self.xpos2 >= tile.xpos and self.xpos2 <= tilexpos2 then
+			return true
+		end
+	end
+	return false
+end
+
+function SensorRect:collidingUp(tile)
+	self:calculatePos()
+	tilexpos2 = (tile.xpos + tile.width)
+	tileypos2 = (tile.ypos + tile.height)
+	if (self.xpos > tile.xpos and self.xpos < tilexpos2) or (self.xpos2 > tile.xpos and self.xpos2 < tilexpos2) then
+		if self.ypos >= tile.ypos and self.ypos <= tileypos2 then
+			return true
+		end
+	end
+	return false
+end
+
+function SensorRect:collidingDown(tile)
+	self:calculatePos()
+	tilexpos2 = (tile.xpos + tile.width)
+	tileypos2 = (tile.ypos + tile.height)
+	if (self.xpos > tile.xpos and self.xpos < tilexpos2) or (self.xpos2 > tile.xpos and self.xpos2 < tilexpos2) then
+		if self.ypos2 >= tile.ypos and self.ypos2 <= tileypos2 then
 			return true
 		end
 	end
