@@ -10,6 +10,8 @@ function love.load()
 	tile = {}
 	tile.xpos = 350
 	tile.ypos = 100
+	tile.width = 16
+	tile.height = 16
 	zoom = false
 end
 

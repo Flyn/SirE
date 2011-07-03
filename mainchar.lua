@@ -1,3 +1,4 @@
+require "sensorrect"
 MainChar = {}
 
 MainChar.__index = MainChar
@@ -54,20 +55,14 @@ function MainChar:updatePos()
 end
 
 function MainChar:isBumpingTiles(tiles)
-	local sensorY = self.ypos+4
-	local sensorX1 = math.floor(self.xpos-10)
-	local sensorX2 = math.ceil(self.xpos)+10
+	wallSensorBar = SensorRect.create(self,-10,10,4,4)
 	for i,tile in ipairs(tiles) do
-		local tilexpos2 = tile.xpos+16
-		local tileypos2 = tile.ypos+16
-		if sensorY > tile.ypos and sensorY < tileypos2 then
-			if sensorX1 >= tile.xpos and sensorX1 <= tilexpos2 then
-				self.xpos = tilexpos2+11
-				self.xspd = 0
-			elseif sensorX2 >= tile.xpos and sensorX2 <= tilexpos2 then
+		if wallSensorBar:collidingLeft(tile) then
+			self.xpos = tile.xpos+tile.width+11
+			self.xspd = 0
+		elseif wallSensorBar:collidingRight(tile) then
 				self.xpos = tile.xpos-11
 				self.xspd = 0
-			end
 		end
 	end
 end
