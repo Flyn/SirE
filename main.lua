@@ -16,8 +16,20 @@ function love.load()
         table.insert(tiles, tile)
 	end
     local obstacle = {}
-	obstacle.xpos = 250
+	obstacle.xpos = 100
 	obstacle.ypos = 96
+    obstacle.width = 16
+	obstacle.height = 16
+    table.insert(tiles, obstacle)
+    local obstacle = {}
+	obstacle.xpos = 350
+	obstacle.ypos = 105
+    obstacle.width = 16
+	obstacle.height = 16
+    table.insert(tiles, obstacle)
+    local obstacle = {}
+	obstacle.xpos = 10
+	obstacle.ypos = 80
     obstacle.width = 16
 	obstacle.height = 16
     table.insert(tiles, obstacle)
