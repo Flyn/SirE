@@ -1,7 +1,6 @@
 require "main_char"
 
 function love.load()
-	--love.graphics.setMode(1280, 720, false, true, 0)
 	tileImg = love.graphics.newImage("tile.tga")
 	tileImg:setFilter("nearest","nearest")
 	ninjaChar = MainChar.create("ninja")
