@@ -5,12 +5,23 @@ function love.load()
 	tileImg:setFilter("nearest","nearest")
 	ninjaChar = MainChar.create("ninja")
 	ninjaChar.xpos = 20
-	ninjaChar.ypos = 100
-	tile = {}
-	tile.xpos = 350
-	tile.ypos = 100
-	tile.width = 16
-	tile.height = 16
+	ninjaChar.ypos = 20
+    tiles = {}
+    for i = 1,25 do
+        local tile = {}
+        tile.xpos = 16*i
+        tile.ypos = 112
+        tile.width = 16
+        tile.height = 16
+        table.insert(tiles, tile)
+	end
+    local obstacle = {}
+	obstacle.xpos = 250
+	obstacle.ypos = 96
+    obstacle.width = 16
+	obstacle.height = 16
+    table.insert(tiles, obstacle)
+    
 	zoom = true
 end
 
@@ -31,8 +42,7 @@ function love.update(dt)
 		os.exit(0)
 	end
 	
-	ninjaChar:updatePos()
-	ninjaChar:isBumpingTiles({tile})
+	ninjaChar:physicsStep(tiles)
 	
 end
 
@@ -46,15 +56,12 @@ function love.draw()
 	if zoom then
 		love.graphics.scale(2,2)
 	end
-	if ninjaChar:isOnGround({tile}) then
-		ground = "yes"
-	else
-		ground = "no"
-	end
 	love.graphics.print("Ninja physics demo\nLeft/Right to move\nRight Click to zoom\nEscape to quit", 0, 200)
-	love.graphics.print("Speed:"..ninjaChar.grndspd.."\nXpos:"..ninjaChar.xpos.."\nYpos:"..ninjaChar.ypos.."\nTouch ground:"..ground, 200, 200)
+	love.graphics.print("Speed:"..ninjaChar.grndspd.."\nXpos:"..ninjaChar.xpos.."\nYpos:"..ninjaChar.ypos, 200, 200)
 	ninjaChar:draw()
-	love.graphics.draw(tileImg, tile.xpos, tile.ypos)
+    for i,tile in ipairs(tiles) do
+        love.graphics.draw(tileImg, tile.xpos, tile.ypos)
+    end
 	love.graphics.setColor(255,255,0,255)
 	love.graphics.line(ninjaChar.xpos-9,ninjaChar.ypos,ninjaChar.xpos-9,ninjaChar.ypos+20)
 	love.graphics.line(ninjaChar.xpos+9,ninjaChar.ypos,ninjaChar.xpos+9,ninjaChar.ypos+20)

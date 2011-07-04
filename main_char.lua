@@ -13,9 +13,12 @@ function MainChar.create(name)
 	newChar.acc = 0.046875
 	newChar.dec = 0.5
 	newChar.grndspd = 0
+    newChar.xspd = 0
+    newChar.yspd = 0
 	newChar.maxspd = 6
 	newChar.angle = 0
 	newChar.isMoving = false
+    newChar.air = true
 	return newChar
 end
 
@@ -48,7 +51,17 @@ function MainChar:run()
 	end
 end
 
-function MainChar:updatePos()
+function MainChar:updateAirPos()
+
+    self.xspd = self.grndspd * math.cos(self.angle)
+    self.yspd = self.yspd + 0.21875
+
+	self.xpos = self.xpos + self.xspd
+	self.ypos = self.ypos + self.yspd
+	self.isMoving = false
+end
+
+function MainChar:updateGroundPos()
 	if not self.isMoving then
 		local sign = 1
 		if self.grndspd ~= 0 then
@@ -57,11 +70,11 @@ function MainChar:updatePos()
 		self.grndspd = self.grndspd - math.min(math.abs(self.grndspd), self.acc) * sign
 	end
 	
-	local xspd = self.grndspd * math.cos(self.angle)
-	local yspd = self.grndspd * -math.sin(self.angle)
-	
-	self.xpos = self.xpos + xspd
-	self.ypos = self.ypos + yspd
+	self.xspd = self.grndspd * math.cos(self.angle)
+	self.yspd = self.grndspd * -math.sin(self.angle)
+    
+	self.xpos = self.xpos + self.xspd
+	self.ypos = self.ypos + self.yspd
 	self.isMoving = false
 end
 
@@ -78,17 +91,35 @@ function MainChar:isBumpingTiles(tiles)
 	end
 end
 
-function MainChar:isOnGround(tiles)
+function MainChar:checkForGround(tiles)
 	local groundSensorBar1 = SensorRect.create(self,-9,-9,0,20)
 	local groundSensorBar2 = SensorRect.create(self,9,9,0,20)
-	local onGround1 = false
-	local onGround2 = false
+    local onGround = false
+    local maxY=0
 	for i,tile in ipairs(tiles) do
-		onGround1 = groundSensorBar1:isColliding(tile) or onGround1
-		onGround2 = groundSensorBar2:isColliding(tile) or onGround2
-	end
-	
-	return onGround1 or onGround2
+		local onGround1 = groundSensorBar1:isColliding(tile)
+		local onGround2 = groundSensorBar2:isColliding(tile)
+        if(onGround1 or onGround2) then
+            self.ypos = tile.ypos-20
+            self.air = false
+        end
+        onGround = onGround or onGround1 or onGround2
+    end
+    
+    if not onGround then
+        self.air = true
+    end
+    
+end
+
+function MainChar:physicsStep(tiles)
+    if self.air then
+        self:updateAirPos()
+    else
+        self:updateGroundPos()
+    end
+    self:isBumpingTiles(tiles)
+    self:checkForGround(tiles)
 end
 
 function MainChar:draw()
