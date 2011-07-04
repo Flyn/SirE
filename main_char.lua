@@ -24,29 +24,24 @@ end
 
 function MainChar:moveRight()
 	self.isMoving = true
-	if self.angle ~= math.rad(0) then
-		self.grndspd = -self.grndspd
-		self.angle = math.rad(0)
-	end
-	self:run()
-end
-
-function MainChar:moveLeft()
-	self.isMoving = true
-	if self.angle ~= math.rad(180) then
-		self.grndspd = -self.grndspd
-		self.angle = math.rad(180)
-	end
-	self:run()
-end
-
-function MainChar:run()
 	if self.grndspd < 0 then
 		self.grndspd = self.grndspd + 0.5
 	elseif self.grndspd < self.maxspd then
 		self.grndspd = self.grndspd + self.acc
 		if self.grndspd > self.maxspd then
 			self.grndspd = self.maxspd
+		end
+	end
+end
+
+function MainChar:moveLeft()
+	self.isMoving = true
+	if self.grndspd > 0 then
+		self.grndspd = self.grndspd - 0.5
+	elseif self.grndspd > -self.maxspd then
+		self.grndspd = self.grndspd - self.acc
+		if self.grndspd < -self.maxspd then
+			self.grndspd = -self.maxspd
 		end
 	end
 end
