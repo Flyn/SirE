@@ -18,11 +18,41 @@ function MainChar.create(name)
 	newChar.maxspd = 6
 	newChar.angle = 0
 	newChar.isMoving = false
-    newChar.air = true
+    newChar.airborne = true
+    newChar.air = 0.09375
 	return newChar
 end
 
+function MainChar:jump()
+    if not self.airborne then
+        self.yspd = -6.5
+        self.airborne = true
+    end
+end
+
+function MainChar:stopJump()
+    if self.airborne and self.yspd < -4 then
+        self.yspd = -4
+    end
+end
+
 function MainChar:moveRight()
+    if self.airborne then
+        self:moveRightAirborne()
+    else
+        self:moveRightOnGround()
+    end
+end
+
+function MainChar:moveLeft()
+    if self.airborne then
+        self:moveLeftAirborne()
+    else
+        self:moveLeftOnGround()
+    end
+end
+
+function MainChar:moveRightOnGround()
 	self.isMoving = true
 	if self.grndspd < 0 then
 		self.grndspd = self.grndspd + 0.5
@@ -34,7 +64,7 @@ function MainChar:moveRight()
 	end
 end
 
-function MainChar:moveLeft()
+function MainChar:moveLeftOnGround()
 	self.isMoving = true
 	if self.grndspd > 0 then
 		self.grndspd = self.grndspd - 0.5
@@ -44,6 +74,24 @@ function MainChar:moveLeft()
 			self.grndspd = -self.maxspd
 		end
 	end
+end
+
+function MainChar:moveRightAirborne()
+    if self.grndspd < self.maxspd then
+		self.grndspd = self.grndspd + self.air
+		if self.grndspd > self.maxspd then
+			self.grndspd = self.maxspd
+		end
+	end
+end
+
+function MainChar:moveLeftAirborne()
+    if self.grndspd > -self.maxspd then
+		self.grndspd = self.grndspd - self.air
+		if self.grndspd < -self.maxspd then
+			self.grndspd = -self.maxspd
+        end
+    end
 end
 
 function MainChar:updateAirPos()
@@ -95,20 +143,22 @@ function MainChar:checkForGround(tiles)
 		local onGround1 = groundSensorBar1:isColliding(tile)
 		local onGround2 = groundSensorBar2:isColliding(tile)
         if(onGround1 or onGround2) then
-            self.ypos = tile.ypos-20
-            self.air = false
+            if self.ypos < tile.ypos then
+                self.ypos = tile.ypos-20
+                self.airborne = false
+            end
         end
         onGround = onGround or onGround1 or onGround2
     end
     
     if not onGround then
-        self.air = true
+        self.airborne = true
     end
     
 end
 
 function MainChar:physicsStep(tiles)
-    if self.air then
+    if self.airborne then
         self:updateAirPos()
     else
         self:updateGroundPos()

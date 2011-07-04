@@ -50,12 +50,21 @@ function love.update(dt)
 	if love.keyboard.isDown("down") then
 		ninjaChar.ypos = ninjaChar.ypos+1
 	end
+	if love.keyboard.isDown(" ") then
+		ninjaChar:jump()
+	end
 	if love.keyboard.isDown("escape") then
 		os.exit(0)
 	end
 	
 	ninjaChar:physicsStep(tiles)
 	
+end
+
+function love.keyreleased(key)
+	if key == " " then
+		ninjaChar:stopJump()
+	end
 end
 
 function love.mousereleased(x, y, button)
