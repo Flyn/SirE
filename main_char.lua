@@ -6,8 +6,13 @@ MainChar.__index = MainChar
 function MainChar.create(name)
 	local newChar = {}
 	setmetatable(newChar, MainChar)
-	newChar.image = love.graphics.newImage(name .. ".tga")
-	newChar.image:setFilter("nearest","nearest")
+	local idleImage = love.graphics.newImage(name .. ".tga")
+	idleImage:setFilter("nearest","nearest")
+	newChar.idleAnim = newAnimation(idleImage, 32, 40, 0.1, 0)
+	local walkImage = love.graphics.newImage(name .. "_walking.tga")
+	walkImage:setFilter("nearest","nearest")
+	newChar.walkAnim = newAnimation(walkImage, 48, 40, 1, 0)
+	newChar.currentAnim = newChar.idleAnim
 	newChar.xpos = 0
 	newChar.ypos = 0
 	newChar.acc = 0.046875
@@ -20,6 +25,7 @@ function MainChar.create(name)
 	newChar.isMoving = false
     newChar.airborne = true
     newChar.air = 0.09375
+    newChar.facing = 1
 	return newChar
 end
 
@@ -54,6 +60,7 @@ end
 
 function MainChar:moveRightOnGround()
 	self.isMoving = true
+	self.facing = 1
 	if self.grndspd < 0 then
 		self.grndspd = self.grndspd + 0.5
 	elseif self.grndspd < self.maxspd then
@@ -66,6 +73,7 @@ end
 
 function MainChar:moveLeftOnGround()
 	self.isMoving = true
+	self.facing = -1
 	if self.grndspd > 0 then
 		self.grndspd = self.grndspd - 0.5
 	elseif self.grndspd > -self.maxspd then
@@ -167,6 +175,26 @@ function MainChar:physicsStep(tiles)
     self:checkForGround(tiles)
 end
 
+function MainChar:update(dt)
+	local oldAnim = self.currentAnim
+	if (self.grndspd == 0) then
+		self.currentAnim = self.idleAnim
+	elseif (self.grndspd > 0) then
+		self.currentAnim = self.walkAnim
+		self.currentAnim:setSpeed(5+math.abs(self.grndspd))
+	elseif (self.grndspd < 0) then
+		self.currentAnim = self.walkAnim
+		self.currentAnim:setSpeed(5+math.abs(self.grndspd))
+	end
+	
+	if oldAnim ~= self.currentAnim then
+		self.currentAnim:reset()
+	end
+	
+	self.currentAnim:update(dt)
+end
+
 function MainChar:draw()
-	love.graphics.draw(self.image, self.xpos, self.ypos, 0, 1, 1, 20, 20)
+	--love.graphics.draw(self.image, self.xpos, self.ypos, 0, 1, 1, self.image:getWidth()/2, self.image:getHeight()-20)
+	self.currentAnim:draw(self.xpos, self.ypos, 0, self.facing, 1, self.currentAnim:getWidth()/2, self.currentAnim:getHeight()-20)
 end

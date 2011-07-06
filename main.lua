@@ -1,4 +1,5 @@
 require "main_char"
+require "anims"
 
 function love.load()
 	tileImg = love.graphics.newImage("tile.tga")
@@ -50,15 +51,19 @@ function love.update(dt)
 	if love.keyboard.isDown("down") then
 		ninjaChar.ypos = ninjaChar.ypos+1
 	end
-	if love.keyboard.isDown(" ") then
-		ninjaChar:jump()
-	end
 	if love.keyboard.isDown("escape") then
 		os.exit(0)
 	end
 	
 	ninjaChar:physicsStep(tiles)
+	ninjaChar:update(dt)
 	
+end
+
+function love.keypressed(key)
+	if key == " " then
+		ninjaChar:jump()
+	end
 end
 
 function love.keyreleased(key)
