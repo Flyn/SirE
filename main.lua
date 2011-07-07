@@ -1,10 +1,10 @@
-require "main_char"
+require "character_sprite"
 require "anims"
 
 function love.load()
 	tileImg = love.graphics.newImage("tile.tga")
 	tileImg:setFilter("nearest","nearest")
-	ninjaChar = MainChar.create("ninja")
+	ninjaChar = CharacterSprite.create("ninja")
 	ninjaChar.xpos = 20
 	ninjaChar.ypos = 20
     tiles = {}
