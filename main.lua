@@ -96,10 +96,4 @@ function love.draw()
     for i,tile in ipairs(tiles) do
         love.graphics.draw(tileImg, tile.xpos, tile.ypos)
     end
-	love.graphics.setColor(255,255,0,255)
-	love.graphics.line(ninjaChar.xpos-9,ninjaChar.ypos,ninjaChar.xpos-9,ninjaChar.ypos+20)
-	love.graphics.line(ninjaChar.xpos+9,ninjaChar.ypos,ninjaChar.xpos+9,ninjaChar.ypos+20)
-	love.graphics.setColor(0,255,0,255)
-	love.graphics.line(ninjaChar.xpos-10,ninjaChar.ypos+4,ninjaChar.xpos+10,ninjaChar.ypos+4)
-	love.graphics.setColor(255,255,255,255)
 end
