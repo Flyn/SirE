@@ -102,8 +102,8 @@ end
 function Character:updateGroundPos()
 	if not self.isMoving then
 		local sign = 1
-		if self.grndspd ~= 0 then
-			sign = (math.abs(self.grndspd)/self.grndspd)
+		if self.grndspd < 0 then
+			sign = -1
 		end
 		self.grndspd = self.grndspd - math.min(math.abs(self.grndspd), self.acc) * sign
 	end
