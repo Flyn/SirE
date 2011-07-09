@@ -124,7 +124,7 @@ function Character:isBumpingTiles(tiles)
 	local wallSensorBar = SensorRect.create(self,-10,10,4,4)
 	for i,tile in ipairs(tiles) do
 		if wallSensorBar:collidingLeft(tile) then
-			self.xpos = tile.xpos+tile.width+11
+			self.xpos = tile.xpos+tile.width-1+11
 			self.grndspd = 0
 		elseif wallSensorBar:collidingRight(tile) then
 				self.xpos = tile.xpos-11
@@ -135,25 +135,27 @@ end
 
 function Character:checkForCeiling(tiles)
 	if self.airborne then
-		local groundSensorBar1 = SensorRect.create(self,-9,-9,0,-20)
-		local groundSensorBar2 = SensorRect.create(self,9,9,0,-20)
+		local groundSensorBar1 = SensorRect.create(self,-9,-9,0,-20-15)
+		local groundSensorBar2 = SensorRect.create(self,9,9,0,-20-15)
 		local onGround = false
 		local maxY=0
 		for i,tile in ipairs(tiles) do
+			if self.ypos < (tile.ypos + tile.height -1 + 20) then
 			local onGround1 = groundSensorBar1:isColliding(tile)
 			local onGround2 = groundSensorBar2:isColliding(tile)
 	        if(onGround1 or onGround2) then
-					self.ypos = tile.ypos + tile.height + 20
+					self.ypos = tile.ypos + tile.height -1 + 20
 	                self.yspd = math.abs(self.yspd)
 	        end
 	        onGround = onGround or onGround1 or onGround2
+			end
 	    end
 	end
 end
 
 function Character:checkForGround(tiles)
-	local groundSensorBar1 = SensorRect.create(self,-9,-9,0,20+16)
-	local groundSensorBar2 = SensorRect.create(self,9,9,0,20+16)
+	local groundSensorBar1 = SensorRect.create(self,-9,-9,0,20+15)
+	local groundSensorBar2 = SensorRect.create(self,9,9,0,20+15)
     local onGround = false
     local minY = nil
     
