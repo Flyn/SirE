@@ -62,6 +62,9 @@ function love.update(dt)
 	if love.keyboard.isDown("escape") then
 		os.exit(0)
 	end
+	if love.keyboard.isDown("d") then
+		debug:debug()
+	end
 	
 	ninjaChar:physicsStep(tiles)
 	ninjaChar:update(dt)
@@ -90,7 +93,7 @@ function love.draw()
 	if zoom then
 		love.graphics.scale(2,2)
 	end
-	love.graphics.print("Ninja physics demo\nLeft/Right to move\nRight Click to zoom\nEscape to quit", 0, 0)
+	love.graphics.print("Physics demo\nLeft/Right to move\nRight Click to zoom\nEscape to quit", 0, 0)
 	love.graphics.print("Speed:"..ninjaChar.grndspd.."\nXpos:"..ninjaChar.xpos.."\nYpos:"..ninjaChar.ypos, 200, 200)
 	ninjaChar:draw()
     for i,tile in ipairs(tiles) do
