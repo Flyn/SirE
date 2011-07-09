@@ -15,11 +15,13 @@ Character.isMoving = false
 Character.airborne = true
 Character.air = 0.09375
 Character.facing = 1
+Character.rolling = false
 
 function Character:jump()
     if not self.airborne then
         self.yspd = -6.5
         self.airborne = true
+        self.rolling = true
     end
 end
 
@@ -72,6 +74,7 @@ function Character:moveLeftOnGround()
 end
 
 function Character:moveRightAirborne()
+	self.facing = 1
     if self.grndspd < self.maxspd then
 		self.grndspd = self.grndspd + self.air
 		if self.grndspd > self.maxspd then
@@ -81,6 +84,7 @@ function Character:moveRightAirborne()
 end
 
 function Character:moveLeftAirborne()
+	self.facing = -1
     if self.grndspd > -self.maxspd then
 		self.grndspd = self.grndspd - self.air
 		if self.grndspd < -self.maxspd then
@@ -129,21 +133,46 @@ function Character:isBumpingTiles(tiles)
 	end
 end
 
+function Character:checkForCeiling(tiles)
+	if self.airborne then
+		local groundSensorBar1 = SensorRect.create(self,-9,-9,0,-20)
+		local groundSensorBar2 = SensorRect.create(self,9,9,0,-20)
+		local onGround = false
+		local maxY=0
+		for i,tile in ipairs(tiles) do
+			local onGround1 = groundSensorBar1:isColliding(tile)
+			local onGround2 = groundSensorBar2:isColliding(tile)
+	        if(onGround1 or onGround2) then
+					self.ypos = tile.ypos + tile.height + 20
+	                self.yspd = math.abs(self.yspd)
+	        end
+	        onGround = onGround or onGround1 or onGround2
+	    end
+	end
+end
+
 function Character:checkForGround(tiles)
-	local groundSensorBar1 = SensorRect.create(self,-9,-9,0,20)
-	local groundSensorBar2 = SensorRect.create(self,9,9,0,20)
-    local onGround = false
-    local maxY=0
-	for i,tile in ipairs(tiles) do
-		local onGround1 = groundSensorBar1:isColliding(tile)
-		local onGround2 = groundSensorBar2:isColliding(tile)
-        if(onGround1 or onGround2) then
-            if self.ypos < tile.ypos then
-                self.ypos = tile.ypos-20
-                self.airborne = false
-            end
-        end
-        onGround = onGround or onGround1 or onGround2
+	local groundSensorBar1 = SensorRect.create(self,-9,-9,0,20+16)
+	local groundSensorBar2 = SensorRect.create(self,9,9,0,20+16)
+    local onGround = false1
+    local minY = nil
+
+    if (self.yspd > 0) or (not self.airborne) then
+		for i,tile in ipairs(tiles) do
+			local onGround1 = false
+			local onGround2 = false
+			if self.ypos >= tile.ypos-20 then
+				onGround1 = groundSensorBar1:isColliding(tile)
+				onGround2 = groundSensorBar2:isColliding(tile)
+				if(onGround1 or onGround2) then
+					if not minY then minY = tile.ypos-20 end
+					minY = math.min(minY, tile.ypos-20)
+	                self.ypos = minY
+	                self.airborne = false
+				end
+	        end
+	        onGround = onGround or onGround1 or onGround2
+	    end
     end
     
     if not onGround then
@@ -159,5 +188,6 @@ function Character:physicsStep(tiles)
         self:updateGroundPos()
     end
     self:isBumpingTiles(tiles)
+    self:checkForCeiling(tiles)
     self:checkForGround(tiles)
 end
