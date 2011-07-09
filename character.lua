@@ -154,23 +154,40 @@ end
 function Character:checkForGround(tiles)
 	local groundSensorBar1 = SensorRect.create(self,-9,-9,0,20+16)
 	local groundSensorBar2 = SensorRect.create(self,9,9,0,20+16)
-    local onGround = false1
+    local onGround = false
     local minY = nil
+    
+    if self.airborne then
 
-    if (self.yspd > 0) or (not self.airborne) then
+	    if (self.yspd >= 0) then
+			for i,tile in ipairs(tiles) do
+				local onGround1 = false
+				local onGround2 = false
+				if self.ypos > tile.ypos-20 then
+					onGround1 = groundSensorBar1:isColliding(tile)
+					onGround2 = groundSensorBar2:isColliding(tile)
+					if(onGround1 or onGround2) then
+						if not minY then minY = tile.ypos-20 end
+						minY = math.min(minY, tile.ypos-20)
+		                self.ypos = minY
+		                self.airborne = false
+					end
+		        end
+		        onGround = onGround or onGround1 or onGround2
+		    end
+	    end
+    
+    else
 		for i,tile in ipairs(tiles) do
 			local onGround1 = false
 			local onGround2 = false
-			if self.ypos >= tile.ypos-20 then
-				onGround1 = groundSensorBar1:isColliding(tile)
-				onGround2 = groundSensorBar2:isColliding(tile)
-				if(onGround1 or onGround2) then
-					if not minY then minY = tile.ypos-20 end
-					minY = math.min(minY, tile.ypos-20)
-	                self.ypos = minY
-	                self.airborne = false
-				end
-	        end
+			onGround1 = groundSensorBar1:isColliding(tile)
+			onGround2 = groundSensorBar2:isColliding(tile)
+			if(onGround1 or onGround2) then
+				if not minY then minY = tile.ypos-20 end
+				minY = math.min(minY, tile.ypos-20)
+                self.ypos = minY
+			end
 	        onGround = onGround or onGround1 or onGround2
 	    end
     end
