@@ -173,6 +173,7 @@ function Character:checkForGround(tiles)
 						minY = math.min(minY, tile.ypos-20)
 		                self.ypos = minY
 		                self.airborne = false
+		                self.rolling = false
 					end
 		        end
 		        onGround = onGround or onGround1 or onGround2

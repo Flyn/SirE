@@ -11,6 +11,10 @@ function CharacterSprite.create(name)
 	local walkImage = love.graphics.newImage(name .. "_walking.tga")
 	walkImage:setFilter("nearest","nearest")
 	newChar.walkAnim = newAnimation(walkImage, 48, 40, 1, 0)
+	local rollImage = love.graphics.newImage(name .. "_rolling.tga")
+	rollImage:setFilter("nearest","nearest")
+	newChar.rollAnim = newAnimation(rollImage, 32, 32, 0.5, 0)
+	
 	newChar.currentAnim = newChar.idleAnim
 
 	return newChar
@@ -20,14 +24,16 @@ function CharacterSprite:update(dt)
 	local oldAnim = self.currentAnim
 	if (self.grndspd == 0) then
 		self.currentAnim = self.idleAnim
-	elseif (self.grndspd > 0) then
-		self.currentAnim = self.walkAnim
-		self.currentAnim:setSpeed(5+math.abs(self.grndspd))
-	elseif (self.grndspd < 0) then
+	else
 		self.currentAnim = self.walkAnim
 		self.currentAnim:setSpeed(5+math.abs(self.grndspd))
 	end
 	
+	if self.rolling then
+		self.currentAnim = self.rollAnim
+		self.currentAnim:setSpeed(5+math.abs(self.grndspd))
+	end
+
 	if oldAnim ~= self.currentAnim then
 		self.currentAnim:reset()
 	end
