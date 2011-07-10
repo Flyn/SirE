@@ -47,7 +47,7 @@ function love.load()
 	obstacle.ypos = 200
     table.insert(tiles, obstacle)
     
-	zoom = true
+	zoom = 2
 end
 
 function love.update(dt)
@@ -89,15 +89,18 @@ end
 
 function love.mousereleased(x, y, button)
 	if button == "r" then
-		zoom = not zoom
+		zoom = 2/zoom
+	end
+	if button == "l" then
+		ninjaChar.xpos = x/zoom
+		ninjaChar.ypos = y/zoom
 	end
 end
 
 function love.draw()
-	if zoom then
-		love.graphics.scale(2,2)
-	end
-	love.graphics.print("Physics demo\nLeft/Right to move\nRight Click to zoom\nEscape to quit", 0, 0)
+	love.graphics.scale(zoom,zoom)
+
+	love.graphics.print("Physics demo\nLeft/Right to move\nLeft click to spawn player\nRight Click to zoom\nEscape to quit", 0, 0)
 	love.graphics.print("Speed:"..ninjaChar.grndspd.."\nXpos:"..ninjaChar.xpos.."\nYpos:"..ninjaChar.ypos, 200, 200)
 	ninjaChar:draw()
     for i,tile in ipairs(tiles) do
