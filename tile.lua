@@ -25,8 +25,10 @@ function Tile:getAbsoluteHeight(x)
 	if not x or not self.heightmap then
 		return self.ypos
 	else
-		local relx = math.floor(x-self.xpos)
-		if (relx < 1) then relx = 1 end
+		relx = math.floor(x-self.xpos) + 1
+		if (relx < 1 or relx > self.width) then
+			return nil
+		end
 		return self.ypos + self.heightmap[relx]
 	end
 end

@@ -30,8 +30,12 @@ function love.load()
         tile.ypos = 250
         table.insert(tiles, tile)
 	end
-    local obstacle = Tile.create(tileImg, 0, 0, 32, 48, defaulthm)
+    local obstacle = Tile.create(tileImg, 32, 0, 16, 48, {15,14,14,13,13,12,12,11,10,9,9,8,7,7,6,6})
 	obstacle.xpos = 100
+	obstacle.ypos = 96
+    table.insert(tiles, obstacle)
+    local obstacle = Tile.create(tileImg, 0, 0, 32, 48, defaulthm)
+	obstacle.xpos = 116
 	obstacle.ypos = 96
     table.insert(tiles, obstacle)
     local obstacle = Tile.create(tileImg, 0, 0, 32, 48, defaulthm)
@@ -98,7 +102,7 @@ function love.draw()
 	ninjaChar:draw()
     for i,tile in ipairs(tiles) do
         tile:draw()
-        for i = 1, 16 do
+        for i = 0, 15 do
 			love.graphics.setColor(0,0,255)
 			love.graphics.point(tile.xpos+i, tile:getAbsoluteHeight(tile.xpos+i))
 			love.graphics.setColor(255,255,255)

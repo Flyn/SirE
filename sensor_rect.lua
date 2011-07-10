@@ -26,9 +26,11 @@ end
 
 function SensorRect:collidingLeft(tile)
 	self:calculatePos()
+	tileypos = tile:getAbsoluteHeight(self.xpos)
+	if not tileypos then return false end
 	tilexpos2 = (tile.xpos + tile.width - 1)
 	tileypos2 = (tile.ypos + tile.height - 1)
-	if (self.ypos >= tile.ypos and self.ypos <= tileypos2) or (self.ypos2 >= tile.ypos and self.ypos2 <= tileypos2) then
+	if (self.ypos >= tileypos and self.ypos <= tileypos2) or (self.ypos2 >= tileypos and self.ypos2 <= tileypos2) then
 		if self.xpos >= tile.xpos and self.xpos <= tilexpos2 then
 			return true
 		end
@@ -38,9 +40,11 @@ end
 
 function SensorRect:collidingRight(tile)
 	self:calculatePos()
+	tileypos = tile:getAbsoluteHeight(self.xpos)
+	if not tileypos then return false end
 	tilexpos2 = (tile.xpos + tile.width - 1)
 	tileypos2 = (tile.ypos + tile.height - 1)
-	if (self.ypos >= tile.ypos and self.ypos <= tileypos2) or (self.ypos2 >= tile.ypos and self.ypos2 <= tileypos2) then
+	if (self.ypos >= tileypos and self.ypos <= tileypos2) or (self.ypos2 >= tileypos and self.ypos2 <= tileypos2) then
 		if self.xpos2 >= tile.xpos and self.xpos2 <= tilexpos2 then
 			return true
 		end
@@ -50,11 +54,13 @@ end
 
 function SensorRect:collidingUp(tile)
 	self:calculatePos()
+	tileypos = tile:getAbsoluteHeight(self.xpos)
+	if not tileypos then return false end
 	tilexpos2 = (tile.xpos + tile.width - 1)
 	tileypos2 = (tile.ypos + tile.height - 1)
-	if (self.xpos >= tile.xpos and self.xpos <= tilexpos2) or (self.xpos2 > tile.xpos and self.xpos2 <= tilexpos2) then
-		if self.ypos >= tile.ypos and self.ypos <= tileypos2 then
-			return true
+	if (self.xpos >= tile.xpos and self.xpos <= tilexpos2) or (self.xpos2 >= tile.xpos and self.xpos2 <= tilexpos2) then
+		if self.ypos >= tileypos and self.ypos <= tileypos2 then
+			return true, tileypos
 		end
 	end
 	return false
@@ -62,11 +68,13 @@ end
 
 function SensorRect:collidingDown(tile)
 	self:calculatePos()
-	tilexpos2 = (tile.xpos + tile.width - 1)
+	tileypos = tile:getAbsoluteHeight(self.xpos)
+	if not tileypos then return false end
+	tilexpos2 = (tile.xpos + tile.width-1)
 	tileypos2 = (tile.ypos + tile.height - 1)
 	if (self.xpos >= tile.xpos and self.xpos <= tilexpos2) or (self.xpos2 >= tile.xpos and self.xpos2 <= tilexpos2) then
-		if self.ypos2 >= tile.ypos and self.ypos2 <= tileypos2 then
-			return true
+		if self.ypos2 >= tileypos and self.ypos2 <= tileypos2 then
+			return true, tileypos
 		end
 	end
 	return false

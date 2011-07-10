@@ -179,11 +179,20 @@ function Character:checkForGround(tiles)
 				local onGround1 = false
 				local onGround2 = false
 				if self.ypos > tile.ypos-(self.height/2) then
-					onGround1 = groundSensorBar1:isColliding(tile)
-					onGround2 = groundSensorBar2:isColliding(tile)
-					if(onGround1 or onGround2) then
-						if not minY then minY = tile.ypos-(self.height/2) end
-						minY = math.min(minY, tile.ypos-(self.height/2))
+					local tileypos = false
+					local tileypos2 = false
+					onGround1, tileypos = groundSensorBar1:collidingDown(tile)
+					onGround2, tileypos2 = groundSensorBar2:collidingDown(tile)
+					if onGround1 then
+						if not minY then minY = tileypos end
+						minY = math.min(minY, tileypos)
+		                self.ypos = minY-(self.height/2)
+		                self.airborne = false
+						self:unroll()
+					end
+					if onGround2 then
+						if not minY then minY = tileypos2-(self.height/2) end
+						minY = math.min(minY, tileypos2-(self.height/2))
 		                self.ypos = minY
 		                self.airborne = false
 						self:unroll()
@@ -197,17 +206,19 @@ function Character:checkForGround(tiles)
 		for i,tile in ipairs(tiles) do
 			local onGround1 = false
 			local onGround2 = false
-			onGround1 = groundSensorBar1:isColliding(tile)
-			onGround2 = groundSensorBar2:isColliding(tile)
+			local tileypos = false
+			local tileypos2 = false
+			onGround1, tileypos = groundSensorBar1:collidingDown(tile)
+			onGround2, tileypos2 = groundSensorBar2:collidingDown(tile)
 			if onGround1 then
-				if not minY then minY = tile:getAbsoluteHeight(self.xpos-9)-(self.height/2) end
-				minY = math.min(minY, tile:getAbsoluteHeight(self.xpos-9)-(self.height/2))
-                self.ypos = minY
+				if not minY then minY = tileypos end
+				minY = math.min(minY, tileypos)
+                self.ypos = minY-(self.height/2)
 			end
 			if onGround2 then
-				if not minY then minY = tile:getAbsoluteHeight(self.xpos+9)-(self.height/2) end
-				minY = math.min(minY, tile:getAbsoluteHeight(self.xpos+9)-(self.height/2))
-                self.ypos = minY
+				if not minY then minY = tileypos2 end
+				minY = math.min(minY, tileypos2)
+                self.ypos = minY - (self.height/2)
 			end
 	        onGround = onGround or onGround1 or onGround2
 	    end
