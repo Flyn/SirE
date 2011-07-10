@@ -140,8 +140,8 @@ function Character:isBumpingTiles(tiles)
 			self.xpos = tile.xpos+tile.width-1+11
 			self.grndspd = 0
 		elseif wallSensorBar:collidingRight(tile) then
-				self.xpos = tile.xpos-11
-				self.grndspd = 0
+			self.xpos = tile.xpos-11
+			self.grndspd = 0
 		end
 	end
 end

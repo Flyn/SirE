@@ -40,7 +40,7 @@ end
 
 function SensorRect:collidingRight(tile)
 	self:calculatePos()
-	tileypos = tile:getAbsoluteHeight(self.xpos)
+	tileypos = tile:getAbsoluteHeight(self.xpos2)
 	if not tileypos then return false end
 	tilexpos2 = (tile.xpos + tile.width - 1)
 	tileypos2 = (tile.ypos + tile.height - 1)
@@ -70,7 +70,7 @@ function SensorRect:collidingDown(tile)
 	self:calculatePos()
 	tileypos = tile:getAbsoluteHeight(self.xpos)
 	if not tileypos then return false end
-	tilexpos2 = (tile.xpos + tile.width-1)
+	tilexpos2 = (tile.xpos + tile.width - 1)
 	tileypos2 = (tile.ypos + tile.height - 1)
 	if (self.xpos >= tile.xpos and self.xpos <= tilexpos2) or (self.xpos2 >= tile.xpos and self.xpos2 <= tilexpos2) then
 		if self.ypos2 >= tileypos and self.ypos2 <= tileypos2 then
