@@ -16,13 +16,26 @@ Character.airborne = true
 Character.air = 0.09375
 Character.facing = 1
 Character.rolling = false
+Character.height = 40
 
 function Character:jump()
     if not self.airborne then
         self.yspd = -6.5
         self.airborne = true
-        self.rolling = true
+        self:roll()
     end
+end
+
+function Character:roll()
+	self.rolling = true
+	self.ypos = self.ypos + 5
+	self.height = 30
+end
+
+function Character:unroll()
+	self.rolling = false
+	self.ypos = self.ypos - 5
+	self.height = 40
 end
 
 function Character:stopJump()
@@ -135,16 +148,16 @@ end
 
 function Character:checkForCeiling(tiles)
 	if self.airborne then
-		local groundSensorBar1 = SensorRect.create(self,-9,-9,0,-20-15)
-		local groundSensorBar2 = SensorRect.create(self,9,9,0,-20-15)
+		local groundSensorBar1 = SensorRect.create(self,-9,-9,0,-(self.height/2)-15)
+		local groundSensorBar2 = SensorRect.create(self,9,9,0,-(self.height/2)-15)
 		local onGround = false
 		local maxY=0
 		for i,tile in ipairs(tiles) do
-			if self.ypos < (tile.ypos + tile.height -1 + 20) then
+			if self.ypos < (tile.ypos + tile.height -1 + (self.height/2)) then
 			local onGround1 = groundSensorBar1:isColliding(tile)
 			local onGround2 = groundSensorBar2:isColliding(tile)
 	        if(onGround1 or onGround2) then
-					self.ypos = tile.ypos + tile.height -1 + 20
+					self.ypos = tile.ypos + tile.height -1 + (self.height/2)
 	                self.yspd = math.abs(self.yspd)
 	        end
 	        onGround = onGround or onGround1 or onGround2
@@ -154,8 +167,8 @@ function Character:checkForCeiling(tiles)
 end
 
 function Character:checkForGround(tiles)
-	local groundSensorBar1 = SensorRect.create(self,-9,-9,0,20+15)
-	local groundSensorBar2 = SensorRect.create(self,9,9,0,20+15)
+	local groundSensorBar1 = SensorRect.create(self,-9,-9,0,(self.height/2)+15)
+	local groundSensorBar2 = SensorRect.create(self,9,9,0,(self.height/2)+15)
     local onGround = false
     local minY = nil
     
@@ -165,15 +178,15 @@ function Character:checkForGround(tiles)
 			for i,tile in ipairs(tiles) do
 				local onGround1 = false
 				local onGround2 = false
-				if self.ypos > tile.ypos-20 then
+				if self.ypos > tile.ypos-(self.height/2) then
 					onGround1 = groundSensorBar1:isColliding(tile)
 					onGround2 = groundSensorBar2:isColliding(tile)
 					if(onGround1 or onGround2) then
-						if not minY then minY = tile.ypos-20 end
-						minY = math.min(minY, tile.ypos-20)
+						if not minY then minY = tile.ypos-(self.height/2) end
+						minY = math.min(minY, tile.ypos-(self.height/2))
 		                self.ypos = minY
 		                self.airborne = false
-		                self.rolling = false
+						self:unroll()
 					end
 		        end
 		        onGround = onGround or onGround1 or onGround2
@@ -186,9 +199,14 @@ function Character:checkForGround(tiles)
 			local onGround2 = false
 			onGround1 = groundSensorBar1:isColliding(tile)
 			onGround2 = groundSensorBar2:isColliding(tile)
-			if(onGround1 or onGround2) then
-				if not minY then minY = tile.ypos-20 end
-				minY = math.min(minY, tile.ypos-20)
+			if onGround1 then
+				if not minY then minY = tile:getAbsoluteHeight(self.xpos-9)-(self.height/2) end
+				minY = math.min(minY, tile:getAbsoluteHeight(self.xpos-9)-(self.height/2))
+                self.ypos = minY
+			end
+			if onGround2 then
+				if not minY then minY = tile:getAbsoluteHeight(self.xpos+9)-(self.height/2) end
+				minY = math.min(minY, tile:getAbsoluteHeight(self.xpos+9)-(self.height/2))
                 self.ypos = minY
 			end
 	        onGround = onGround or onGround1 or onGround2

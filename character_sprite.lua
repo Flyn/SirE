@@ -42,5 +42,5 @@ function CharacterSprite:update(dt)
 end
 
 function CharacterSprite:draw()
-	self.currentAnim:draw(self.xpos, self.ypos, 0, self.facing, 1, self.currentAnim:getWidth()/2, self.currentAnim:getHeight()-20)
+	self.currentAnim:draw(self.xpos, self.ypos, 0, self.facing, 1, self.currentAnim:getWidth()/2, self.currentAnim:getHeight()-(self.height/2))
 end
