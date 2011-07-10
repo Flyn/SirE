@@ -33,6 +33,6 @@ function Tile:getAbsoluteHeight(x)
 	end
 end
 
-function Tile:draw()
+function Tile:render()
 	love.graphics.drawq(tileImg, self.quad, self.xpos, self.ypos)
 end
