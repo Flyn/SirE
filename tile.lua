@@ -7,7 +7,7 @@ Tile.width = 0
 Tile.height = 0
 Tile.quad = nil
 
-function Tile.create(image, x, y, w, h, heightmap)
+function Tile.create(image, x, y, w, h, heightmap, angle)
 	local newTile = {}
 	Tile:mixin(newTile)
 	
@@ -15,6 +15,7 @@ function Tile.create(image, x, y, w, h, heightmap)
 	newTile.height = h
 	newTile.quad = love.graphics.newQuad(x, y, w, h, image:getWidth(), image:getHeight())
 	newTile.heightmap = heightmap
+	newTile.angle = angle or 0
 
 	return newTile
 end

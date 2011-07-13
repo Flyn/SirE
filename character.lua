@@ -21,7 +21,9 @@ Character.height = 40
 
 function Character:jump()
     if not self.airborne then
-        self.yspd = -6.5
+		self.xspd = self.xspd -(6.5*-math.sin(math.rad(-self.angle)))
+        self.yspd = self.yspd -(6.5*math.cos(math.rad(-self.angle)))
+        self.angle = 0
         self.airborne = true
         self:roll()
     end
@@ -89,27 +91,27 @@ end
 
 function Character:moveRightAirborne()
 	self.facing = 1
-    if self.grndspd < self.maxspd then
-		self.grndspd = self.grndspd + self.air
-		if self.grndspd > self.maxspd then
-			self.grndspd = self.maxspd
+    if self.xspd < self.maxspd then
+		self.xspd = self.xspd + self.air
+		if self.xspd > self.maxspd then
+			self.xspd = self.maxspd
 		end
 	end
 end
 
 function Character:moveLeftAirborne()
 	self.facing = -1
-    if self.grndspd > -self.maxspd then
-		self.grndspd = self.grndspd - self.air
-		if self.grndspd < -self.maxspd then
-			self.grndspd = -self.maxspd
+    if self.xspd > -self.maxspd then
+		self.xspd = self.xspd - self.air
+		if self.xspd < -self.maxspd then
+			self.xspd = -self.maxspd
         end
     end
 end
 
 function Character:updateAirPos()
 
-    self.xspd = self.grndspd * math.cos(self.angle)
+    self.xspd = self.xspd * math.cos(self.angle)
     self.yspd = self.yspd + 0.21875
     
     self.yspd = math.min(self.yspd, self.maxYspd)
@@ -128,8 +130,12 @@ function Character:updateGroundPos()
 		self.grndspd = self.grndspd - math.min(math.abs(self.grndspd), self.acc) * sign
 	end
 	
-	self.xspd = self.grndspd * math.cos(self.angle)
-	self.yspd = self.grndspd * -math.sin(self.angle)
+	if self.grndspd ~= 0 or math.abs(self.angle)>30 then
+		self.grndspd = self.grndspd + 0.125*math.sin(math.rad(-self.angle))
+	end
+	
+	self.xspd = self.grndspd * math.cos(math.rad(-self.angle))
+	self.yspd = self.grndspd * -math.sin(math.rad(-self.angle))
     
     self.yspd = math.min(self.yspd, self.maxYspd)
     
@@ -144,28 +150,30 @@ function Character:isBumpingTiles(tiles)
 		if wallSensorBar:collidingLeft(tile) then
 			self.xpos = tile.xpos+tile.width-1+11
 			self.grndspd = 0
+			self.xspd = 0
 		elseif wallSensorBar:collidingRight(tile) then
 			self.xpos = tile.xpos-11
 			self.grndspd = 0
+			self.xspd = 0
 		end
 	end
 end
 
 function Character:checkForCeiling(tiles)
-	if self.airborne then
+	if self.airborne and self.yspd < 0 then
 		local groundSensorBar1 = SensorRect.create(self,-9,-9,0,-(self.height/2)-15)
 		local groundSensorBar2 = SensorRect.create(self,9,9,0,-(self.height/2)-15)
 		local onGround = false
 		local maxY=0
 		for i,tile in ipairs(tiles) do
 			if self.ypos < (tile.ypos + tile.height -1 + (self.height/2)) then
-			local onGround1 = groundSensorBar1:isColliding(tile)
-			local onGround2 = groundSensorBar2:isColliding(tile)
-	        if(onGround1 or onGround2) then
-					self.ypos = tile.ypos + tile.height -1 + (self.height/2)
-	                self.yspd = math.abs(self.yspd)
-	        end
-	        onGround = onGround or onGround1 or onGround2
+				local onGround1 = groundSensorBar1:isColliding(tile)
+				local onGround2 = groundSensorBar2:isColliding(tile)
+		        if(onGround1 or onGround2) then
+						self.ypos = tile.ypos + tile.height -1 + (self.height/2)
+		                self.yspd = 0
+		        end
+		        onGround = onGround or onGround1 or onGround2
 			end
 	    end
 	end
@@ -190,15 +198,23 @@ function Character:checkForGround(tiles)
 					onGround2, tileypos2 = groundSensorBar2:collidingDown(tile)
 					if onGround1 then
 						if not minY then minY = tileypos end
-						minY = math.min(minY, tileypos)
+						if (tileypos <= minY) then
+							minY = tileypos
+							self.angle = tile.angle
+						end
 		                self.ypos = minY-(self.height/2)
+		                self.grndspd = self.xspd
 		                self.airborne = false
 						self:unroll()
 					end
 					if onGround2 then
 						if not minY then minY = tileypos2-(self.height/2) end
-						minY = math.min(minY, tileypos2-(self.height/2))
+						if ((tileypos2-(self.height/2)) <= minY) then
+							minY = tileypos2-(self.height/2)
+							self.angle = tile.angle
+						end
 		                self.ypos = minY
+		                self.grndspd = self.xspd
 		                self.airborne = false
 						self:unroll()
 					end
@@ -217,12 +233,18 @@ function Character:checkForGround(tiles)
 			onGround2, tileypos2 = groundSensorBar2:collidingDown(tile)
 			if onGround1 then
 				if not minY then minY = tileypos end
-				minY = math.min(minY, tileypos)
+				if (tileypos <= minY) then
+					minY = tileypos
+					self.angle = tile.angle
+				end
                 self.ypos = minY-(self.height/2)
 			end
 			if onGround2 then
 				if not minY then minY = tileypos2 end
-				minY = math.min(minY, tileypos2)
+				if (tileypos2 <= minY) then
+					minY = tileypos2
+					self.angle = tile.angle
+				end
                 self.ypos = minY - (self.height/2)
 			end
 	        onGround = onGround or onGround1 or onGround2

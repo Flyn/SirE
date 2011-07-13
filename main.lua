@@ -20,42 +20,48 @@ function love.update(dt)
     
     if (buffer>=rate) then
 
-    for i = 1, math.floor((buffer/rate)+0.5) do
-        if love.keyboard.isDown("left") then
-            level.mainChar:moveLeft()
-        end
-        if love.keyboard.isDown("right") then
-            level.mainChar:moveRight()
-        end
-        if love.keyboard.isDown("up") then
-            level.mainChar.ypos = level.mainChar.ypos-1
-        end
-        if love.keyboard.isDown("down") then
-            level.mainChar.ypos = level.mainChar.ypos+1
-        end
-        if love.keyboard.isDown("escape") then
-            os.exit(0)
-        end
-        if love.keyboard.isDown("d") then
-            debug:debug()
-        end
-        if love.keyboard.isDown("kp+") then
-            speed = speed+1
-        end
-        if love.keyboard.isDown("kp-") then
-            speed = speed-1
-        end
-        
-        speed = math.max(10, speed)
-        speed = math.min(600, speed)
-        
-        level.mainChar:physicsStep(level.tiles)
+	    for i = 1, math.floor((buffer/rate)+0.5) do
+	        if love.keyboard.isDown("left") then
+	            level.mainChar:moveLeft()
+	        end
+	        if love.keyboard.isDown("right") then
+	            level.mainChar:moveRight()
+	        end
+	        if love.keyboard.isDown("up") then
+	            level.mainChar.ypos = level.mainChar.ypos-1
+	        end
+	        if love.keyboard.isDown("down") then
+	            level.mainChar.ypos = level.mainChar.ypos+1
+	        end
+	        if love.keyboard.isDown("escape") then
+	            os.exit(0)
+	        end
+	        if love.keyboard.isDown("d") then
+	            debug:debug()
+	        end
+	        if love.keyboard.isDown("kp+") then
+	            speed = speed+1
+	        end
+	        if love.keyboard.isDown("kp-") then
+	            speed = speed-1
+	        end
+	        
+	        speed = math.max(10, speed)
+	        speed = math.min(600, speed)
+	        
+	        level.mainChar:physicsStep(level.tiles)
+	    
+	    end
+	    level.mainChar:update(1/60)
+	    
+	    buffer = 0
     
     end
-    level.mainChar:update(1/60)
     
-    buffer = 0
-    
+    -- Just for the lulz
+    if (level.mainChar.xpos < 0) then
+		level.mainChar.xpos = 0
+		level.mainChar.xspd = -level.mainChar.xspd
     end
 	
 end
@@ -93,7 +99,7 @@ function love.draw()
 
 	if hud then
         love.graphics.print("Physics demo Speed: "..speed.." FPS: "..love.timer.getFPS().."\nLeft/Right to move\nLeft click to spawn player\nRight Click to zoom\nEscape to quit", 0, 0)
-        love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos, 200, 200)
+        love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nAngle:"..level.mainChar.angle, 200, 200)
         for i,tile in ipairs(level.tiles) do
             for i = 0, (tile.width-1) do
                 love.graphics.setColor(0,0,255)
