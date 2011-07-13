@@ -9,6 +9,7 @@ Character.dec = 0.5
 Character.grndspd = 0
 Character.xspd = 0
 Character.yspd = 0
+Character.maxYspd = 10
 Character.maxspd = 6
 Character.angle = 0
 Character.isMoving = false
@@ -110,6 +111,8 @@ function Character:updateAirPos()
 
     self.xspd = self.grndspd * math.cos(self.angle)
     self.yspd = self.yspd + 0.21875
+    
+    self.yspd = math.min(self.yspd, self.maxspd)
 
 	self.xpos = self.xpos + self.xspd
 	self.ypos = self.ypos + self.yspd
@@ -127,6 +130,8 @@ function Character:updateGroundPos()
 	
 	self.xspd = self.grndspd * math.cos(self.angle)
 	self.yspd = self.grndspd * -math.sin(self.angle)
+    
+    self.yspd = math.min(self.yspd, self.maxspd)
     
 	self.xpos = self.xpos + self.xspd
 	self.ypos = self.ypos + self.yspd
