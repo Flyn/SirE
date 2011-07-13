@@ -15,7 +15,7 @@ end
 
 function Level1:createTiles()
 
-	tileImg = love.graphics.newImage("level1_tiles.tga")
+	local tileImg = love.graphics.newImage("level1_tiles.tga")
 	tileImg:setFilter("nearest","nearest")
 	self.tiles = {}
 		local defaulthm = {5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5}
@@ -56,6 +56,8 @@ function Level1:createTiles()
 	obstacle.xpos = 10
 	obstacle.ypos = 200
     table.insert(self.tiles, obstacle)
+    
+    self.tilesetBatch = love.graphics.newSpriteBatch(tileImg, #self.tiles)
 
 end
 
@@ -70,7 +72,9 @@ end
 
 function Level1:render()
     for i,tile in ipairs(self.tiles) do
-        tile:render()
+        self.tilesetBatch:clear()
+        self.tilesetBatch:addq(tile.quad, tile.xpos, tile.ypos)
+        love.graphics.draw(self.tilesetBatch)
     end
     for i,object in ipairs(self.objects) do
 		object:render()

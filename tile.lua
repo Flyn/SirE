@@ -5,7 +5,6 @@ Tile.xpos = 0
 Tile.ypos = 0
 Tile.width = 0
 Tile.height = 0
-Tile.image = nil
 Tile.quad = nil
 
 function Tile.create(image, x, y, w, h, heightmap)
@@ -14,7 +13,6 @@ function Tile.create(image, x, y, w, h, heightmap)
 	
 	newTile.width = w
 	newTile.height = h
-	newTile.image = image
 	newTile.quad = love.graphics.newQuad(x, y, w, h, image:getWidth(), image:getHeight())
 	newTile.heightmap = heightmap
 
@@ -31,8 +29,4 @@ function Tile:getAbsoluteHeight(x)
 		end
 		return self.ypos + self.heightmap[relx]
 	end
-end
-
-function Tile:render()
-	love.graphics.drawq(tileImg, self.quad, self.xpos, self.ypos)
 end
