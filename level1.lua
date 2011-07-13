@@ -71,11 +71,6 @@ end
 function Level1:render()
     for i,tile in ipairs(self.tiles) do
         tile:render()
-        for i = 0, (tile.width-1) do
-			love.graphics.setColor(0,0,255)
-			love.graphics.point(tile.xpos+i, tile:getAbsoluteHeight(tile.xpos+i))
-			love.graphics.setColor(255,255,255)
-        end
     end
     for i,object in ipairs(self.objects) do
 		object:render()
