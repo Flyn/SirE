@@ -18,9 +18,9 @@ function love.update(dt)
     
     buffer = buffer + dt
     
-    if (buffer > rate) then
-    
-    for i = 0, (buffer/rate) do
+    if (buffer>=rate) then
+
+    for i = 1, math.floor((buffer/rate)+0.5) do
         if love.keyboard.isDown("left") then
             level.mainChar:moveLeft()
         end
