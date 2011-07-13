@@ -26,7 +26,7 @@ function CharacterSprite:update(dt)
 		self.currentAnim = self.idleAnim
 	else
 		self.currentAnim = self.walkAnim
-		self.currentAnim:setSpeed(5+math.abs(self.grndspd))
+		self.currentAnim:setSpeed(8+math.abs(self.grndspd))
 	end
 	
 	if self.rolling then

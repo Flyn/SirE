@@ -52,7 +52,7 @@ function love.update(dt)
         level.mainChar:physicsStep(level.tiles)
     
     end
-    level.mainChar:update(dt)
+    level.mainChar:update(1/60)
     
     buffer = 0
     
