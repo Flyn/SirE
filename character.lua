@@ -307,27 +307,22 @@ function Character:physicsStep(tiles)
 end
 
 function Character:updateSprite(dt)
-	local oldAnim = self.sprite.currentAnim
 	if (self.grndspd == 0) then
-		self.sprite.currentAnim = self.sprite.idleAnim
+		self.sprite:setState("idle")
 	else
-		self.sprite.currentAnim = self.sprite.walkAnim
-		self.sprite.currentAnim:setSpeed(8+math.abs(self.grndspd))
+		self.sprite:setState("walk")
+		self.sprite:setAnimSpeed(8+math.abs(self.grndspd))
 	end
 	
 	if self.rolling then
-		self.sprite.currentAnim = self.sprite.rollAnim
-		self.sprite.currentAnim:setSpeed(5+math.abs(self.grndspd))
-	end
-
-	if oldAnim ~= self.sprite.currentAnim then
-		self.sprite.currentAnim:reset()
+		self.sprite:setState("roll")
+		self.sprite:setAnimSpeed(5+math.abs(self.grndspd))
 	end
 	
-	self.sprite.currentAnim:update(dt)
+	self.sprite:setRotation(math.rad(-self.angle))
+	if math.abs(self.angle) < 30 or self.rolling then self.sprite:setRotation(0) end
 	
-	self.sprite.rotation = math.rad(-self.angle)
-	if math.abs(self.angle) < 30 or self.rolling then self.sprite.rotation = 0 end
+	self.sprite:update(dt)
 end
 
 function Character:renderSprite()

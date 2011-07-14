@@ -18,12 +18,39 @@ function CharacterSprite.create(name)
 	newChar.currentAnim = newChar.idleAnim
 	
 	newChar.rotation = 0
+	
+	newChar.state = "idle"
 
 	return newChar
 end
 
+function CharacterSprite:setAnimSpeed(speed)
+	self.currentAnim:setSpeed(speed)
+end
+
+function CharacterSprite:setState(state)
+	self.state = state
+end
+
+function CharacterSprite:setRotation(angle)
+	self.rotation = angle
+end
+
 function CharacterSprite:update(dt)
+	local oldAnim = self.currentAnim
+	if self.state == "idle" then
+		self.currentAnim = self.idleAnim
+	elseif self.state == "walk" then
+		self.currentAnim = self.walkAnim
+	elseif self.state == "roll" then
+		self.currentAnim = self.rollAnim
+	end
+
+	if oldAnim ~= self.currentAnim then
+		self.currentAnim:reset()
+	end
 	
+	self.currentAnim:update(dt)
 end
 
 function CharacterSprite:render(charObj)
