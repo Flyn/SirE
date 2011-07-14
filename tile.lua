@@ -1,19 +1,11 @@
 require "mixin"
 Tile = Mixin:create()
 
-Tile.xpos = 0
-Tile.ypos = 0
-Tile.width = 0
-Tile.height = 0
-Tile.quad = nil
-
-function Tile.create(image, x, y, w, h, heightmap, angle)
+function Tile.create(sprite, heightmap, angle)
 	local newTile = {}
 	Tile:mixin(newTile)
 	
-	newTile.width = w
-	newTile.height = h
-	newTile.quad = love.graphics.newQuad(x, y, w, h, image:getWidth(), image:getHeight())
+	newTile.sprite = sprite
 	newTile.heightmap = heightmap
 	newTile.angle = angle or 0
 

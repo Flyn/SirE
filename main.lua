@@ -1,5 +1,4 @@
 require "character_sprite"
-require "tile"
 require "level1"
 require "anims"
 
