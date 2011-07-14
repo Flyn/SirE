@@ -1,6 +1,6 @@
 require "sensor_rect"
 require "character"
-CharacterSprite = Mixin:create(Character)
+CharacterSprite = Mixin:create()
 
 function CharacterSprite.create(name)
 	local newChar = {}
@@ -16,33 +16,16 @@ function CharacterSprite.create(name)
 	newChar.rollAnim = newAnimation(rollImage, 32, 32, 0.5, 0)
 	
 	newChar.currentAnim = newChar.idleAnim
+	
+	newChar.rotation = 0
 
 	return newChar
 end
 
 function CharacterSprite:update(dt)
-	local oldAnim = self.currentAnim
-	if (self.grndspd == 0) then
-		self.currentAnim = self.idleAnim
-	else
-		self.currentAnim = self.walkAnim
-		self.currentAnim:setSpeed(8+math.abs(self.grndspd))
-	end
 	
-	if self.rolling then
-		self.currentAnim = self.rollAnim
-		self.currentAnim:setSpeed(5+math.abs(self.grndspd))
-	end
-
-	if oldAnim ~= self.currentAnim then
-		self.currentAnim:reset()
-	end
-	
-	self.currentAnim:update(dt)
 end
 
-function CharacterSprite:render()
-	local rotation = math.rad(-self.angle)
-	if math.abs(self.angle) < 30 or self.rolling then rotation = 0 end
-	self.currentAnim:draw(self.xpos, self.ypos, rotation, self.facing, 1, self.currentAnim:getWidth()/2, self.currentAnim:getHeight()-(self.height/2))
+function CharacterSprite:render(charObj)
+	self.currentAnim:draw(charObj.xpos, charObj.ypos, self.rotation, charObj.facing, 1, self.currentAnim:getWidth()/2, self.currentAnim:getHeight()-(charObj.height/2))
 end

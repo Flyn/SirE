@@ -78,7 +78,8 @@ end
 
 function Level1:createObjects()
 	self.objects = {}
-	local ninjaChar = CharacterSprite.create("ninja")
+	local ninjaCharSprite = CharacterSprite.create("ninja")
+	local ninjaChar = Character.create(ninjaCharSprite)
 	ninjaChar.xpos = 20
 	ninjaChar.ypos = 20
 	table.insert(self.objects, ninjaChar)
@@ -92,6 +93,6 @@ function Level1:render()
         love.graphics.draw(self.tilesetBatch)
     end
     for i,object in ipairs(self.objects) do
-		object:render()
+		object:renderSprite()
     end
 end

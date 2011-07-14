@@ -19,6 +19,15 @@ Character.facing = 1
 Character.rolling = false
 Character.height = 40
 
+function Character.create(sprite)
+	local newChar = {}
+	Character:mixin(newChar)
+	
+	newChar.sprite = sprite
+
+	return newChar
+end
+
 function Character:jump()
     if not self.airborne then
 		self.xspd = self.xspd -(6.5*-math.sin(math.rad(-self.angle)))
@@ -295,4 +304,32 @@ function Character:physicsStep(tiles)
     self:isBumpingTiles(tiles)
     self:checkForCeiling(tiles)
     self:checkForGround(tiles)
+end
+
+function Character:updateSprite(dt)
+	local oldAnim = self.sprite.currentAnim
+	if (self.grndspd == 0) then
+		self.sprite.currentAnim = self.sprite.idleAnim
+	else
+		self.sprite.currentAnim = self.sprite.walkAnim
+		self.sprite.currentAnim:setSpeed(8+math.abs(self.grndspd))
+	end
+	
+	if self.rolling then
+		self.sprite.currentAnim = self.sprite.rollAnim
+		self.sprite.currentAnim:setSpeed(5+math.abs(self.grndspd))
+	end
+
+	if oldAnim ~= self.sprite.currentAnim then
+		self.sprite.currentAnim:reset()
+	end
+	
+	self.sprite.currentAnim:update(dt)
+	
+	self.sprite.rotation = math.rad(-self.angle)
+	if math.abs(self.angle) < 30 or self.rolling then self.sprite.rotation = 0 end
+end
+
+function Character:renderSprite()
+	self.sprite:render(self)
 end
