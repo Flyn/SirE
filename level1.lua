@@ -69,7 +69,7 @@ function Level1:createTiles()
     table.insert(self.tiles, obstacle)
     local obstacle = Tile.create(tileImg, 0, 0, 32, 48, defaulthm)
 	obstacle.xpos = 8
-	obstacle.ypos = 200
+	obstacle.ypos = 205
     table.insert(self.tiles, obstacle)
     
     self.tilesetBatch = love.graphics.newSpriteBatch(tileImg, #self.tiles)

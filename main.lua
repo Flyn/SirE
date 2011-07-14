@@ -3,6 +3,10 @@ require "tile"
 require "level1"
 require "anims"
 
+function math.getSign(i)
+	if (i < 0) then return -1 else return 1 end
+end
+
 function love.load()
 	level = Level1.create()
     
@@ -27,11 +31,8 @@ function love.update(dt)
 	        if love.keyboard.isDown("right") then
 	            level.mainChar:moveRight()
 	        end
-	        if love.keyboard.isDown("up") then
-	            level.mainChar.ypos = level.mainChar.ypos-1
-	        end
 	        if love.keyboard.isDown("down") then
-	            level.mainChar.ypos = level.mainChar.ypos+1
+	            level.mainChar:roll()	
 	        end
 	        if love.keyboard.isDown("escape") then
 	            os.exit(0)
@@ -104,6 +105,9 @@ function love.draw()
 	if hud then
         love.graphics.print("Physics demo Speed: "..speed.." FPS: "..love.timer.getFPS().."\nLeft/Right to move\nLeft click to spawn player\nRight Click to zoom\nEscape to quit", 0, 0)
         love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nAngle:"..level.mainChar.angle, 200, 200)
+        love.graphics.setColor(0,255,0)
+        love.graphics.point(level.mainChar.xpos, level.mainChar.ypos+4)
+        love.graphics.setColor(255,255,255)
         for i,tile in ipairs(level.tiles) do
             for i = 0, (tile.width-1) do
                 love.graphics.setColor(0,0,255)

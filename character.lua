@@ -30,9 +30,11 @@ function Character:jump()
 end
 
 function Character:roll()
-	self.rolling = true
-	self.ypos = self.ypos + 5
-	self.height = 30
+	if (self.airborne or math.abs(self.xspd) > 0.53125) and not self.rolling then
+		self.rolling = true
+		self.ypos = self.ypos + 5
+		self.height = 30
+	end
 end
 
 function Character:unroll()
@@ -67,8 +69,12 @@ function Character:moveRightOnGround()
 	self.isMoving = true
 	self.facing = 1
 	if self.grndspd < 0 then
-		self.grndspd = self.grndspd + 0.5
-	elseif self.grndspd < self.maxspd then
+		if self.rolling then
+			self.grndspd = self.grndspd + 0.125
+		else
+			self.grndspd = self.grndspd + 0.5
+		end
+	elseif self.grndspd < self.maxspd and not self.rolling then
 		self.grndspd = self.grndspd + self.acc
 		if self.grndspd > self.maxspd then
 			self.grndspd = self.maxspd
@@ -80,8 +86,12 @@ function Character:moveLeftOnGround()
 	self.isMoving = true
 	self.facing = -1
 	if self.grndspd > 0 then
-		self.grndspd = self.grndspd - 0.5
-	elseif self.grndspd > -self.maxspd then
+		if self.rolling then
+			self.grndspd = self.grndspd - 0.125
+		else
+			self.grndspd = self.grndspd - 0.5
+		end
+	elseif self.grndspd > -self.maxspd and not self.rolling then
 		self.grndspd = self.grndspd - self.acc
 		if self.grndspd < -self.maxspd then
 			self.grndspd = -self.maxspd
@@ -122,16 +132,29 @@ function Character:updateAirPos()
 end
 
 function Character:updateGroundPos()
-	if not self.isMoving then
+	if self.rolling and math.abs(self.xspd) < 0.5 and self.angle < 30 then
+		self:unroll()
+	end
+	if (not self.isMoving) or self.rolling then
 		local sign = 1
 		if self.grndspd < 0 then
 			sign = -1
 		end
-		self.grndspd = self.grndspd - math.min(math.abs(self.grndspd), self.acc) * sign
+		
+		local friction = self.acc
+		if self.rolling then friction = friction / 2 end
+		
+		self.grndspd = self.grndspd - math.min(math.abs(self.grndspd), friction) * sign
 	end
 	
 	if self.grndspd ~= 0 or math.abs(self.angle)>30 then
 		self.grndspd = self.grndspd + 0.125*math.sin(math.rad(-self.angle))
+	elseif self.rolling then
+		if math.getSign(self.grndspd) ~= math.getSign(-self.angle) then
+			self.grndspd = self.grndspd + 0.078125*math.sin(math.rad(-self.angle))
+		else
+			self.grndspd = self.grndspd + 0.3125*math.sin(math.rad(-self.angle))
+		end
 	end
 	
 	self.xspd = self.grndspd * math.cos(math.rad(-self.angle))
@@ -161,8 +184,10 @@ end
 
 function Character:checkForCeiling(tiles)
 	if self.airborne and self.yspd < 0 then
-		local groundSensorBar1 = SensorRect.create(self,-9,-9,0,-(self.height/2)-15)
-		local groundSensorBar2 = SensorRect.create(self,9,9,0,-(self.height/2)-15)
+		local sensorray = 9
+		if self.rolling then sensorray = 7 end
+		local groundSensorBar1 = SensorRect.create(self,-sensorray,-sensorray,0,-(self.height/2)-15)
+		local groundSensorBar2 = SensorRect.create(self,sensorray,sensorray,0,-(self.height/2)-15)
 		local onGround = false
 		local maxY=0
 		for i,tile in ipairs(tiles) do
@@ -180,8 +205,10 @@ function Character:checkForCeiling(tiles)
 end
 
 function Character:checkForGround(tiles)
-	local groundSensorBar1 = SensorRect.create(self,-9,-9,0,(self.height/2)+15)
-	local groundSensorBar2 = SensorRect.create(self,9,9,0,(self.height/2)+15)
+	local sensorray = 9
+	if self.rolling then sensorray = 7 end
+	local groundSensorBar1 = SensorRect.create(self,-sensorray,-sensorray,0,(self.height/2)+15)
+	local groundSensorBar2 = SensorRect.create(self,sensorray,sensorray,0,(self.height/2)+15)
     local onGround = false
     local minY = nil
     
