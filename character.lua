@@ -25,15 +25,17 @@ function Character:jump()
         self.yspd = self.yspd -(6.5*math.cos(math.rad(-self.angle)))
         self.angle = 0
         self.airborne = true
-        self:roll()
+        self:roll(true)
     end
 end
 
-function Character:roll()
-	if (self.airborne or math.abs(self.xspd) > 0.53125) and not self.rolling then
-		self.rolling = true
-		self.ypos = self.ypos + 5
-		self.height = 30
+function Character:roll(force)
+	if not self.rolling then
+		if (not self.airborne and (math.abs(self.xspd) > 0.53125)) or force then
+			self.rolling = true
+			self.ypos = self.ypos + 5
+			self.height = 30
+		end
 	end
 end
 
