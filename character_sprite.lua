@@ -42,5 +42,7 @@ function CharacterSprite:update(dt)
 end
 
 function CharacterSprite:render()
-	self.currentAnim:draw(self.xpos, self.ypos, 0, self.facing, 1, self.currentAnim:getWidth()/2, self.currentAnim:getHeight()-(self.height/2))
+	local rotation = math.rad(-self.angle)
+	if math.abs(self.angle) < 30 then rotation = 0 end
+	self.currentAnim:draw(self.xpos, self.ypos, rotation, self.facing, 1, self.currentAnim:getWidth()/2, self.currentAnim:getHeight()-(self.height/2))
 end
