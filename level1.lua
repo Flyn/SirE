@@ -87,11 +87,11 @@ function Level1:createObjects()
 end
 
 function Level1:render()
+    self.tilesetBatch:clear()
     for i,tile in ipairs(self.tiles) do
-        self.tilesetBatch:clear()
         self.tilesetBatch:addq(tile.quad, tile.xpos, tile.ypos)
-        love.graphics.draw(self.tilesetBatch)
     end
+    love.graphics.draw(self.tilesetBatch)
     for i,object in ipairs(self.objects) do
 		object:renderSprite()
     end
