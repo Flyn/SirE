@@ -7,13 +7,11 @@ TileSprite.quad = nil
 
 function TileSprite.create(image, x, y, w, h)
 	local newTileSprite = {}
-	TileSprite:mixin(newTile)
+	TileSprite:mixin(newTileSprite)
 	
 	newTileSprite.width = w
 	newTileSprite.height = h
 	newTileSprite.quad = love.graphics.newQuad(x, y, w, h, image:getWidth(), image:getHeight())
-	newTileSprite.heightmap = heightmap
-	newTileSprite.angle = angle or 0
 
-	return newTile
+	return newTileSprite
 end

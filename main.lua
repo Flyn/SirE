@@ -63,6 +63,8 @@ function love.update(dt)
 		level.mainChar.xpos = 0
 		level.mainChar.xspd = -level.mainChar.xspd
     end
+    
+    level:preRendering()
 	
 end
 
