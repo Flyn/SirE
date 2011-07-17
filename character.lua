@@ -197,8 +197,8 @@ function Character:checkForCeiling(tiles)
 	if self.airborne and self.yspd < 0 then
 		local sensorray = 9
 		if self.rolling then sensorray = 7 end
-		local groundSensorBar1 = SensorRect.create(self,-sensorray,-sensorray,0,-(self.height/2)-15)
-		local groundSensorBar2 = SensorRect.create(self,sensorray,sensorray,0,-(self.height/2)-15)
+		local groundSensorBar1 = SensorRect.create(self,-sensorray,-sensorray,-(self.height/2)-15,0)
+		local groundSensorBar2 = SensorRect.create(self,sensorray,sensorray,-(self.height/2)-15,0)
 		local onGround = false
 		local maxY=0
 		for i,tile in ipairs(tiles) do
@@ -232,8 +232,8 @@ function Character:checkForGround(tiles)
 				if self.ypos > tile.ypos-(self.height/2) then
 					local tileypos = false
 					local tileypos2 = false
-					onGround1, tileypos = groundSensorBar1:collidingDown(tile)
-					onGround2, tileypos2 = groundSensorBar2:collidingDown(tile)
+					onGround1, tileypos = groundSensorBar1:isColliding(tile)
+					onGround2, tileypos2 = groundSensorBar2:isColliding(tile)
 					if onGround1 then
 						if not minY then minY = tileypos end
 						if (tileypos <= minY) then
@@ -246,12 +246,12 @@ function Character:checkForGround(tiles)
 						self:unroll()
 					end
 					if onGround2 then
-						if not minY then minY = tileypos2-(self.height/2) end
-						if ((tileypos2-(self.height/2)) <= minY) then
-							minY = tileypos2-(self.height/2)
+						if not minY then minY = tileypos2 end
+						if ((tileypos2) <= minY) then
+							minY = tileypos2
 							self.angle = tile.angle
 						end
-		                self.ypos = minY
+		                self.ypos = minY-(self.height/2)
 		                self.grndspd = self.xspd
 		                self.airborne = false
 						self:unroll()
@@ -267,8 +267,8 @@ function Character:checkForGround(tiles)
 			local onGround2 = false
 			local tileypos = false
 			local tileypos2 = false
-			onGround1, tileypos = groundSensorBar1:collidingDown(tile)
-			onGround2, tileypos2 = groundSensorBar2:collidingDown(tile)
+			onGround1, tileypos = groundSensorBar1:isColliding(tile)
+			onGround2, tileypos2 = groundSensorBar2:isColliding(tile)
 			if onGround1 then
 				if not minY then minY = tileypos end
 				if (tileypos <= minY) then

@@ -21,7 +21,17 @@ function SensorRect:calculatePos()
 end
 
 function SensorRect:isColliding(tile)
-	return (self:collidingLeft(tile) or self:collidingRight(tile) or self:collidingUp(tile) or self:collidingDown(tile))
+	self:calculatePos()
+	tileypos = tile:getAbsoluteHeight(self.xpos)
+	if not tileypos then return false end
+	tilexpos2 = (tile.xpos + tile.width - 1)
+	tileypos2 = (tile.ypos + tile.height - 1)
+	if (self.xpos >= tile.xpos and self.xpos <= tilexpos2) or (self.xpos2 >= tile.xpos and self.xpos2 <= tilexpos2) or (tile.xpos >= self.xpos and tile.xpos <= self.xpos2) or (tilexpos2 >= self.xpos and tilexpos2 <= self.xpos2) then
+		if (self.ypos >= tileypos and self.ypos <= tileypos2) or (self.ypos2 >= tileypos and self.ypos2 <= tileypos2) or (tileypos >= self.ypos and tileypos <= self.ypos2) or (tileypos2 >= self.ypos and tileypos2 <= self.ypos2) then
+			return true, tileypos
+		end
+	end
+	return false
 end
 
 function SensorRect:collidingLeft(tile)
