@@ -15,9 +15,9 @@ end
 
 function SensorRect:calculatePos()
 	self.xpos = math.floor(self.parent.xpos + self.relx1)
-	self.xpos2 = math.ceil(self.parent.xpos + self.relx2)
+	self.xpos2 = math.floor(self.parent.xpos + self.relx2)
 	self.ypos = math.floor(self.parent.ypos + self.rely1)
-	self.ypos2 = math.ceil(self.parent.ypos + self.rely2)
+	self.ypos2 = math.floor(self.parent.ypos + self.rely2)
 end
 
 function SensorRect:isColliding(tile)
