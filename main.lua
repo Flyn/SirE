@@ -7,7 +7,8 @@ function math.getSign(i)
 end
 
 function love.load()
-	level = Level1.create()
+	level = Level1:create()
+    level:init()
     
 	zoom = 2
     hud = true
