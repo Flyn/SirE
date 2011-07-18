@@ -3,7 +3,6 @@ TileChunk = Mixin:create()
 
 TileChunk.width = 0
 TileChunk.height = 0
-TileChunk.tiles = {}
 
 function TileChunk.create(w, h)
 	local newTileChunk = {}
@@ -11,6 +10,7 @@ function TileChunk.create(w, h)
 	
 	newTileChunk.width  = w
 	newTileChunk.height = h
+    newTileChunk.tiles = {}
 	
 	for x = 1, w do
 		newTileChunk.tiles[x] = {}

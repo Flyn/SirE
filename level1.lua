@@ -30,11 +30,11 @@ function Level1:createTiles()
 	tileImg:setFilter("nearest","nearest")
 	self.tilesetBatch = love.graphics.newSpriteBatch(tileImg, 150)
 	
-	defaulthm = TileHeightmap.create({5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5}, 0)
+	local defaulthm = TileHeightmap.create({5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5}, 0)
 	
 	local basic_chunk = TileChunk.autoCreate(tileImg, 0, 0, 2, 3, defaulthm)
 
-	for i = 2,10 do
+	for i = 3,10 do
 		self.chunks[i*2][8] = basic_chunk
 	end
 	for i = 1,3 do
@@ -44,6 +44,38 @@ function Level1:createTiles()
 	self.chunks[11][6] = basic_chunk
 	self.chunks[22][7] = basic_chunk
 	self.chunks[1][13] = basic_chunk
+    
+    local slopes_hm = {}
+    slopes_hm[1] = TileHeightmap.create({16,15,14,13,13,12,12,11,11,11,11,10,10,10,10,10}, 15)
+    slopes_hm[2] = TileHeightmap.create({10,10,10,10,10, 9, 9, 9, 9, 9, 9 ,9, 9, 9, 9, 9}, 5)
+    slopes_hm[3] = TileHeightmap.create({ 9, 9, 9, 9,10,10,10,10,10,11,11,12,12,12,13,14}, -15)
+    slopes_hm[4] = TileHeightmap.create({15,15,16,16,16,16,16,16,16,16,16,16,16,16,16,16}, 2)
+    slopes_hm[5] = TileHeightmap.create({16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16}, 2)
+    
+    local slopes_chunk = TileChunk.create(5, 3)
+    
+    local slopes_sprites = {}
+    slopes_sprites[1] = TileSprite.create(tileImg, 2*16, 0, 16, 48)
+    slopes_sprites[2] = TileSprite.create(tileImg, 3*16, 0, 16, 48)
+    slopes_sprites[3] = TileSprite.create(tileImg, 4*16, 0, 16, 48)
+    slopes_sprites[4] = TileSprite.create(tileImg, 5*16, 0, 16, 48)
+    
+    local slopes_tiles = {}
+    slopes_tiles[1] = Tile.createTemplate(slopes_sprites[1], slopes_hm[1])
+    slopes_tiles[2] = Tile.createTemplate(slopes_sprites[2], slopes_hm[2])
+    slopes_tiles[3] = Tile.createTemplate(slopes_sprites[3], slopes_hm[3])
+    slopes_tiles[4] = Tile.createTemplate(slopes_sprites[4], slopes_hm[4])
+    slopes_tiles[5] = Tile.createTemplate(slopes_sprites[4], slopes_hm[5])
+    
+    slopes_chunk:setTile(0, 0, slopes_tiles[5])
+    slopes_chunk:setTile(1, 0, slopes_tiles[1])
+    slopes_chunk:setTile(2, 0, slopes_tiles[2])
+    slopes_chunk:setTile(3, 0, slopes_tiles[3])
+    slopes_chunk:setTile(4, 0, slopes_tiles[4])
+    
+    for i = 8,40,5 do
+        self.chunks[i][15] = slopes_chunk
+	end
 	
 end
 
@@ -90,9 +122,9 @@ function Level1:preRendering()
 end
 
 function Level1:render()
-    love.graphics.draw(self.tilesetBatch)
-
     for i,object in ipairs(self.objects) do
 		object:renderSprite()
     end
+    
+    love.graphics.draw(self.tilesetBatch)
 end
