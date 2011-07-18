@@ -1,5 +1,6 @@
 require "character_sprite"
 require "level1"
+require "level2"
 require "anims"
 
 function math.getSign(i)
@@ -7,8 +8,15 @@ function math.getSign(i)
 end
 
 function love.load()
-	level = Level1:create()
-    level:init()
+	love.graphics.setFont(love.graphics.newFont(10))
+	
+	levels = {Level1, Level2}
+	levels[1]:init()
+	levels[2]:init()
+	
+	levelnum = 0
+
+	level = levels[1]
     
 	zoom = 2
     hud = true
@@ -73,6 +81,13 @@ function love.keypressed(key)
 	if key == " " then
 		level.mainChar:jump()
 	end
+	if key == "f1" then
+		levelnum = (levelnum+1)%#levels
+		level = levels[levelnum+1]
+	end
+	if key == "r" then
+		level:init()
+	end
 	if key == "tab" then
 		level.mainChar.grndspd = level.mainChar.maxspd * level.mainChar.facing
 		level.mainChar.xspd = level.mainChar.maxspd * level.mainChar.facing
@@ -105,8 +120,8 @@ function love.draw()
     
 
 	if hud then
-        love.graphics.print("Physics demo Speed: "..speed.." FPS: "..love.timer.getFPS().."\nLeft/Right to move\nLeft click to spawn player\nRight Click to zoom\nEscape to quit", 0, 0)
-        love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nAngle:"..level.mainChar.angle, 200, 200)
+        love.graphics.print("Physics demo\n"..level.title.." Speed: "..speed.." FPS: "..love.timer.getFPS().."\nF1 to switch levels, R to reload level".."\nLeft/Right to move\nLeft click to spawn player\nRight Click to zoom\nEscape to quit", 0, 0)
+        love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nAngle:"..level.mainChar.angle, 200, 0)
         love.graphics.setColor(0,255,0)
         love.graphics.point(level.mainChar.xpos, level.mainChar.ypos+4)
         love.graphics.setColor(255,255,255)

@@ -33,6 +33,10 @@ function Tile:getAbsoluteHeight(x)
 		if (relx < 1 or relx > self.sprite.width) then
 			return nil
 		end
-		return self.ypos + self.heightmap.heights[relx]
+		rely = self.heightmap.heights[relx]
+		if rely >= self.sprite.height then
+			return nil
+		end
+		return self.ypos + rely
 	end
 end

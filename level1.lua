@@ -1,7 +1,7 @@
 require "level"
 Level1 = Level:create()
 
-Level1.title = "Test Level"
+Level1.title = "Slope Level"
 
 function Level1:createTiles()
 
@@ -70,4 +70,3 @@ function Level1:populateLevel()
 	self.mainChar.xpos = 20
 	self.mainChar.ypos = 20
 end
-
