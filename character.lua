@@ -132,7 +132,7 @@ end
 
 function Character:updateAirPos()
 
-    self.xspd = self.xspd * math.cos(self.angle)
+    self.xspd = self.xspd
     self.yspd = self.yspd + 0.21875
     
     self.yspd = math.min(self.yspd, self.maxYspd)
@@ -291,6 +291,7 @@ function Character:checkForGround(tiles)
     
     if not onGround then
         self.airborne = true
+        self.angle = 0
     end
     
 end
