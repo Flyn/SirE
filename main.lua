@@ -111,8 +111,8 @@ function love.keypressed(key)
 		level:init()
 	end
 	if key == "tab" then
-		level.mainChar.grndspd = level.mainChar.maxspd * level.mainChar.facing
-		level.mainChar.xspd = level.mainChar.maxspd * level.mainChar.facing
+		level.mainChar.grndspd = level.mainChar.mode.maxspd * level.mainChar.facing
+		level.mainChar.xspd = level.mainChar.mode.maxspd * level.mainChar.facing
 	end
 	if key == "h" then
         hud = not hud
