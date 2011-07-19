@@ -194,24 +194,21 @@ function Character:isBumpingTiles(tiles)
 end
 
 function Character:checkForCeiling(tiles)
-	if self.airborne and self.yspd < 0 then
-		local sensorray = 9
-		if self.rolling then sensorray = 7 end
-		local groundSensorBar1 = SensorRect.create(self,-sensorray,-sensorray,-(self.height/2)-15,0)
-		local groundSensorBar2 = SensorRect.create(self,sensorray,sensorray,-(self.height/2)-15,0)
-		local onGround = false
-		local maxY=0
-		for i,tile in ipairs(tiles) do
-			if self.ypos < (tile.ypos + tile.height -1 + (self.height/2)) then
-				local onGround1 = groundSensorBar1:isColliding(tile)
-				local onGround2 = groundSensorBar2:isColliding(tile)
-		        if(onGround1 or onGround2) then
-						self.ypos = tile.ypos + tile.height + 1 + (self.height/2)
-		                self.yspd = 0
-		        end
-		        onGround = onGround or onGround1 or onGround2
+	local sensorray = 9
+	if self.rolling then sensorray = 7 end
+	local ceilingSensorBar1 = SensorRect.create(self,-sensorray,-sensorray,-(self.height/2)-15,0)
+	local ceilingSensorBar2 = SensorRect.create(self,sensorray,sensorray,-(self.height/2)-15,0)
+	local touchCeiling = false
+	for i,tile in ipairs(tiles) do
+		if self.ypos < (tile.ypos + tile.height -1 + (self.height/2)) then
+			local touchCeiling1 = ceilingSensorBar1:isColliding(tile)
+			local touchCeiling2 = ceilingSensorBar2:isColliding(tile)
+			if(touchCeiling1 or touchCeiling2) then
+					self.ypos = tile.ypos + tile.height + 1 + (self.height/2)
+	                self.yspd = 0
 			end
-	    end
+			touchCeiling = touchCeiling or touchCeiling1 or touchCeiling2
+		end
 	end
 end
 
