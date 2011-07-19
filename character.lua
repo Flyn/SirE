@@ -206,7 +206,7 @@ function Character:checkForCeiling(tiles)
 				local onGround1 = groundSensorBar1:isColliding(tile)
 				local onGround2 = groundSensorBar2:isColliding(tile)
 		        if(onGround1 or onGround2) then
-						self.ypos = tile.ypos + tile.height -1 + (self.height/2)
+						self.ypos = tile.ypos + tile.height + 1 + (self.height/2)
 		                self.yspd = 0
 		        end
 		        onGround = onGround or onGround1 or onGround2
