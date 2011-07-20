@@ -28,7 +28,9 @@ function love.update(dt)
 
     local rate = 1/speed
     
-    buffer = buffer + dt
+    if dt < 0.1 then
+        buffer = buffer + dt
+    end
     
     if (buffer>=rate) then
 
