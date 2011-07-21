@@ -1,4 +1,5 @@
 require "character_sprite"
+require "camera"
 require "level1"
 require "level2"
 require "anims"
@@ -18,10 +19,15 @@ function love.load()
 
 	level = levels[1]
     
-	zoom = 2
     hud = true
     buffer = 0
     speed = 60
+    
+    gameCamera = Camera.create(320, 224, love.graphics.getWidth(), love.graphics.getHeight())
+    gameCamera.leftBorder = 144
+	gameCamera.rightBorder = 160
+	gameCamera.topBorder = 64
+	gameCamera.bottomBorder = 128
 end
 
 function love.update(dt)
@@ -64,6 +70,18 @@ function love.update(dt)
 	    
 	    end
 	    level.mainChar:updateSprite(1/60)
+        
+        local yOffset = 0
+	
+        if level.mainChar.rolling then yOffset = -5 end
+        
+        if level.mainChar.mode == level.mainChar.modeGround then
+            gameCamera:moveToward(nil, level.mainChar.ypos+yOffset)
+            gameCamera:follow(level.mainChar.xpos, nil)
+        end
+        if level.mainChar.mode == level.mainChar.modeAir then
+            gameCamera:follow(level.mainChar.xpos,level.mainChar.ypos+yOffset)
+        end
 	    
 	    buffer = 0
     
@@ -76,7 +94,7 @@ function love.update(dt)
     end
     
     level:preRendering()
-	
+
 end
 
 function love.keypressed(key)
@@ -107,30 +125,34 @@ end
 
 function love.mousereleased(x, y, button)
 	if button == "r" then
-		zoom = 2/zoom
+		gameCamera.zoom = 0.5/gameCamera.zoom
 	end
 	if button == "l" then
-		level.mainChar.xpos = x/zoom
-		level.mainChar.ypos = y/zoom
+		level.mainChar.xpos, level.mainChar.ypos = gameCamera:windowToWorld(x, y)
 	end
 end
 
 function love.draw()
-	love.graphics.scale(zoom,zoom)
+	love.graphics.scale(gameCamera:getZoomedRatio())
 
 	level:render()
+	
+	love.graphics.scale(1/gameCamera:getZoomedRatio())
     
-
 	if hud then
         love.graphics.print("Physics demo\n"..level.title.." Speed: "..speed.." FPS: "..love.timer.getFPS().."\nF1 to switch levels, R to reload level".."\nLeft/Right to move\nLeft click to spawn player\nRight Click to zoom\nEscape to quit", 0, 0)
-        love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nAngle:"..level.mainChar.angle, 200, 0)
-        love.graphics.setColor(0,255,0)
-        love.graphics.point(level.mainChar.xpos, level.mainChar.ypos+4)
+        love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nAngle:"..level.mainChar.angle, 200, 0)        
+        
+        love.graphics.scale(gameCamera:getZoomedRatio())
+        
+		love.graphics.setColor(0,255,0)
+        gameCamera:point(level.mainChar.xpos, level.mainChar.ypos+4)
         love.graphics.setColor(255,255,255)
+        
         for i,tile in ipairs(level.tiles) do
             for i = 0, (tile.width-1) do
                 love.graphics.setColor(0,0,255)
-                love.graphics.point(tile.xpos+i, tile:getAbsoluteHeight(tile.xpos+i))
+                gameCamera:point(tile.xpos+i, tile:getAbsoluteHeight(tile.xpos+i))
                 love.graphics.setColor(255,255,255)
             end
         end

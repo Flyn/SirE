@@ -54,5 +54,5 @@ function CharacterSprite:update(dt)
 end
 
 function CharacterSprite:render(charObj)
-	self.currentAnim:draw(charObj.xpos, charObj.ypos, self.rotation, charObj.facing, 1, self.currentAnim:getWidth()/2, self.currentAnim:getHeight()-(charObj.height/2))
+	gameCamera:drawAnim(self.currentAnim, charObj.xpos, charObj.ypos, self.rotation, charObj.facing, 1, self.currentAnim:getWidth()/2, self.currentAnim:getHeight()-(charObj.height/2))
 end

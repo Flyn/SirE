@@ -60,7 +60,10 @@ function Level:preRendering()
         self.tilesetBatch:clear()
     
         for i,tile in pairs(self.tiles) do
-            self.tilesetBatch:addq(tile.sprite.quad, tile.xpos, tile.ypos)
+			if (tile.xpos >= gameCamera.xpos-20 and tile.xpos < gameCamera.xpos+gameCamera:getZoomedWidth()+20)
+			and (tile.ypos >= gameCamera.ypos-20 and tile.ypos < gameCamera.ypos+gameCamera:getZoomedHeight()+20) then
+				self.tilesetBatch:addq(tile.sprite.quad, tile.xpos, tile.ypos)
+            end
         end
         
     end
@@ -72,6 +75,6 @@ function Level:render()
     end
     
     if self.tilesetBatch then
-        love.graphics.draw(self.tilesetBatch)
+        gameCamera:draw(self.tilesetBatch)
     end
 end
