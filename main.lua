@@ -2,6 +2,7 @@ require "character_sprite"
 require "camera"
 require "level1"
 require "level2"
+require "level3"
 require "anims"
 
 function math.getSign(i)
@@ -11,9 +12,10 @@ end
 function love.load()
 	love.graphics.setFont(love.graphics.newFont(10))
 	
-	levels = {Level1, Level2}
+	levels = {Level1, Level2, Level3}
 	levels[1]:init()
 	levels[2]:init()
+    levels[3]:init()
 	
 	levelnum = 0
 
