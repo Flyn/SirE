@@ -318,7 +318,7 @@ function Character:updateSprite(dt)
 	end
 	
 	self.sprite:setRotation(math.rad(-self.angle))
-	if math.abs(self.angle) < 30 or self.rolling then self.sprite:setRotation(0) end
+	if math.abs(self.angle) < 20 or self.rolling then self.sprite:setRotation(0) end
 	
 	self.sprite:update(dt)
 end
