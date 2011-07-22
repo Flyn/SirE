@@ -58,13 +58,13 @@ function Camera:moveToward(x, y)
 	if x then
 		local diff = math.abs(x - gameCamera.xpos)
 		if diff ~= (self.width/self.zoom) / 2 then
-			self.xpos = self.xpos+math.max(math.min(diff-(self.width/self.zoom) / 2, 2),-3)
+			self.xpos = self.xpos+math.max(math.min(diff-(self.width/self.zoom) / 2, 6),-6)
 		end
 	end
 	if y then
 		local diff = math.abs(y - gameCamera.ypos)
 		if diff ~= (self.height/self.zoom) / 2 then
-			self.ypos = self.ypos+math.max(math.min(diff-(self.height/self.zoom) / 2, 2),-3)
+			self.ypos = self.ypos+math.max(math.min(diff-(self.height/self.zoom) / 2, 6),-6)
 		end
 	end
 end

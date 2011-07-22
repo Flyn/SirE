@@ -124,9 +124,15 @@ function love.keyreleased(key)
 end
 
 function love.mousereleased(x, y, button)
-	if button == "r" then
-		gameCamera.zoom = 0.5/gameCamera.zoom
-	end
+    if button == "r" then
+        gameCamera.zoom = 1
+    end
+    if button == "wd" then
+        gameCamera.zoom = gameCamera.zoom-0.1
+    end
+    if button == "wu" then
+        gameCamera.zoom = gameCamera.zoom+0.1
+    end
 	if button == "l" then
 		level.mainChar.xpos, level.mainChar.ypos = gameCamera:windowToWorld(x, y)
 	end
