@@ -2,6 +2,7 @@ require "mixin"
 require "sensor_rect"
 require "mode_air"
 require "mode_ground"
+require "mode_rightwall"
 Character = Mixin:create()
 
 Character.xpos = 0
@@ -14,6 +15,7 @@ Character.angle = 0
 Character.facing = 1
 Character.rolling = false
 Character.height = 40
+Character.lock = 0
 
 function Character.create(sprite)
 	local newChar = {}
@@ -22,6 +24,7 @@ function Character.create(sprite)
 	newChar.sprite = sprite
 	newChar.modeAir = ModeAir.create(newChar)
 	newChar.modeGround = ModeGround.create(newChar)
+	newChar.modeRightWall = ModeRightWall.create(newChar)
 	newChar.mode = newChar.modeAir
 
 	return newChar
@@ -54,11 +57,15 @@ function Character:stopJump()
 end
 
 function Character:moveRight()
-	self.mode:moveRight()
+	if self.lock == 0 then
+		self.mode:moveRight()
+	end
 end
 
 function Character:moveLeft()
-	self.mode:moveLeft()
+	if self.lock == 0 then
+		self.mode:moveLeft()
+	end
 end
 
 function Character:isBumpingTiles(tiles)

@@ -162,6 +162,8 @@ function love.draw()
             for i = 0, (tile.width-1) do
                 love.graphics.setColor(0,0,255)
                 gameCamera:point(tile.xpos+i, tile:getAbsoluteHeight(tile.xpos+i))
+                love.graphics.setColor(0,255,0)
+                gameCamera:point(tile:getAbsoluteWidth(tile.ypos+i), tile.ypos+i)
                 love.graphics.setColor(255,255,255)
             end
         end

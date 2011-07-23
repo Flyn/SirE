@@ -35,6 +35,21 @@ function SensorRect:isColliding(tile)
 	return false
 end
 
+function SensorRect:isCollidingWall(tile)
+	self:calculatePos()
+	tilexpos = tile:getAbsoluteWidth(self.ypos)
+	tileypos = tile.ypos
+	if not tilexpos then return false end
+	tilexpos2 = (tile.xpos + tile.width - 1)
+	tileypos2 = (tile.ypos + tile.height - 1)
+	if (self.xpos >= tilexpos and self.xpos <= tilexpos2) or (self.xpos2 >= tilexpos and self.xpos2 <= tilexpos2) or (tilexpos >= self.xpos and tilexpos <= self.xpos2) or (tilexpos2 >= self.xpos and tilexpos2 <= self.xpos2) then
+		if (self.ypos >= tileypos and self.ypos <= tileypos2) or (self.ypos2 >= tileypos and self.ypos2 <= tileypos2) or (tileypos >= self.ypos and tileypos <= self.ypos2) or (tileypos2 >= self.ypos and tileypos2 <= self.ypos2) then
+			return true, tilexpos
+		end
+	end
+	return false
+end
+
 function SensorRect:collidingLeft(tile)
 	self:calculatePos()
 	tileypos = tile:getAbsoluteHeight(self.xpos)
