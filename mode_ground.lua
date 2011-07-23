@@ -16,8 +16,8 @@ function ModeGround.create(char)
 end
 
 function ModeGround:jump()
-	self.character.xspd = self.character.xspd -(6.5*-math.sin(math.rad(-self.character.angle)))
-	self.character.yspd = self.character.yspd -(6.5*math.cos(math.rad(-self.character.angle)))
+	self.character.xspd = self.character.xspd -(6.5*math.sin(math.rad(self.character.angle)))
+	self.character.yspd = self.character.yspd -(6.5*math.cos(math.rad(self.character.angle)))
 	self.character.angle = 0
 	self.character:setAirborne()
 	self.character:roll()
@@ -91,17 +91,17 @@ function ModeGround:updatePos()
 	end
 	
 	if self.character.grndspd ~= 0 then
-		self.character.grndspd = self.character.grndspd + 0.125*math.sin(math.rad(-self.character.angle))
+		self.character.grndspd = self.character.grndspd + 0.125*math.sin(math.rad(self.character.angle))
 	elseif self.character.rolling then
-		if math.getSign(self.character.grndspd) ~= math.getSign(-self.character.angle) then
-			self.character.grndspd = self.character.grndspd + 0.078125*math.sin(math.rad(-self.character.angle))
+		if math.getSign(self.character.grndspd) ~= math.getSign(self.character.angle) then
+			self.character.grndspd = self.character.grndspd + 0.078125*math.sin(math.rad(self.character.angle))
 		else
-			self.character.grndspd = self.character.grndspd + 0.3125*math.sin(math.rad(-self.character.angle))
+			self.character.grndspd = self.character.grndspd + 0.3125*math.sin(math.rad(self.character.angle))
 		end
 	end
 	
-	self.character.xspd = self.character.grndspd * math.cos(math.rad(-self.character.angle))
-	self.character.yspd = self.character.grndspd * -math.sin(math.rad(-self.character.angle))
+	self.character.xspd = self.character.grndspd * math.cos(math.rad(self.character.angle))
+	self.character.yspd = self.character.grndspd * -math.sin(math.rad(self.character.angle))
     
     self.character.yspd = math.min(self.character.yspd, self.character.maxYspd)
     
