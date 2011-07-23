@@ -87,7 +87,7 @@ function ModeGround:updatePos()
 		self.character.grndspd = self.character.grndspd - math.min(math.abs(self.character.grndspd), friction) * sign
 	end
 	
-	if self.character.grndspd ~= 0 or math.abs(self.character.angle)>30 then
+	if self.character.grndspd ~= 0 then
 		self.character.grndspd = self.character.grndspd + 0.125*math.sin(math.rad(-self.character.angle))
 	elseif self.character.rolling then
 		if math.getSign(self.character.grndspd) ~= math.getSign(-self.character.angle) then

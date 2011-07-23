@@ -62,16 +62,18 @@ function Character:moveLeft()
 end
 
 function Character:isBumpingTiles(tiles)
-	local wallSensorBar = SensorRect.create(self,-10,10,4,4)
-	for i,tile in ipairs(tiles) do
-		if wallSensorBar:collidingLeft(tile) then
-			self.xpos = tile.xpos+tile.width+10
-			self.grndspd = 0
-			self.xspd = 0
-		elseif wallSensorBar:collidingRight(tile) then
-			self.xpos = tile.xpos-10
-			self.grndspd = 0
-			self.xspd = 0
+	if self.mode == self.modeAir or self.mode == self.modeGround then
+		local wallSensorBar = SensorRect.create(self,-10,10,4,4)
+		for i,tile in ipairs(tiles) do
+			if wallSensorBar:collidingLeft(tile) then
+				self.xpos = tile.xpos+tile.width+10
+				self.grndspd = 0
+				self.xspd = 0
+			elseif wallSensorBar:collidingRight(tile) then
+				self.xpos = tile.xpos-10
+				self.grndspd = 0
+				self.xspd = 0
+			end
 		end
 	end
 end

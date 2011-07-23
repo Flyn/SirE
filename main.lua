@@ -76,13 +76,12 @@ function love.update(dt)
         local yOffset = 0
 	
         if level.mainChar.rolling then yOffset = -5 end
-        
-        if level.mainChar.mode == level.mainChar.modeGround then
-            gameCamera:moveToward(nil, level.mainChar.ypos+yOffset)
-            gameCamera:follow(level.mainChar.xpos, nil)
-        end
+
         if level.mainChar.mode == level.mainChar.modeAir then
             gameCamera:follow(level.mainChar.xpos,level.mainChar.ypos+yOffset)
+        else
+            gameCamera:moveToward(nil, level.mainChar.ypos+yOffset)
+            gameCamera:follow(level.mainChar.xpos, nil)
         end
 	    
 	    buffer = 0
@@ -93,6 +92,7 @@ function love.update(dt)
     if (level.mainChar.xpos < 0) then
 		level.mainChar.xpos = 0
 		level.mainChar.xspd = -level.mainChar.xspd
+		level.mainChar.grndspd = -level.mainChar.grndspd
     end
     
     level:preRendering()
@@ -149,7 +149,8 @@ function love.draw()
     
 	if hud then
         love.graphics.print("Physics demo\n"..level.title.." Speed: "..speed.." FPS: "..love.timer.getFPS().."\nF1 to switch levels, R to reload level".."\nLeft/Right to move\nLeft click to spawn player\nRight Click to zoom\nEscape to quit", 0, 0)
-        love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nAngle:"..level.mainChar.angle, 200, 0)        
+        love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nAngle:"..level.mainChar.angle, 200, 0)
+        love.graphics.print("XSpeed:"..level.mainChar.xspd.."\nYSpeed:"..level.mainChar.yspd, 400, 0)
         
         love.graphics.scale(gameCamera:getZoomedRatio())
         

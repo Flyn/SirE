@@ -83,10 +83,6 @@ function ModeAir:checkForGround(tiles)
 						minY = tileypos
 						self.character.angle = tile.angle
 					end
-	                self.character.ypos = minY-(self.character.height/2)
-	                self.character.grndspd = self.character.xspd
-	                self.character:setOnFloor()
-					self.character:unroll()
 				end
 				if onGround2 then
 					if not minY then minY = tileypos2 end
@@ -94,8 +90,24 @@ function ModeAir:checkForGround(tiles)
 						minY = tileypos2
 						self.character.angle = tile.angle
 					end
-	                self.character.ypos = minY-(self.character.height/2)
-	                self.character.grndspd = self.character.xspd
+				end
+				if onGround1 or onGround2 then
+					self.character.ypos = minY-(self.character.height/2)
+					if self.character.angle > -20 and self.character.angle < 20 then
+						self.character.grndspd = self.character.xspd
+					elseif (self.character.angle >= 20 and self.character.angle < 45) or (self.character.angle <= -20 and self.character.angle > -45) then
+						if math.abs(self.character.xspd) > self.character.yspd then
+							self.character.grndspd = self.character.xspd
+						else
+							self.character.grndspd = self.character.yspd*0.5*-math.getSign(math.cos(math.rad(-self.character.angle)))
+						end
+					elseif (self.character.angle >= 45 and self.character.angle < 90) or (self.character.angle <= -45 and self.character.angle > -90) then
+						if math.abs(self.character.xspd) > self.character.yspd then
+							self.character.grndspd = self.character.xspd
+						else
+							self.character.grndspd = self.character.yspd*-math.getSign(math.cos(math.rad(-self.character.angle)))
+						end
+					end
 	                self.character:setOnFloor()
 					self.character:unroll()
 				end
