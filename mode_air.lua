@@ -52,6 +52,9 @@ function ModeAir:moveLeft()
 end
 
 function ModeAir:updatePos()
+	if self.character.angle ~= 0 then
+		self.character.angle = self.character.angle - 3*math.getSign(self.character.angle)
+	end
     self.character.yspd = self.character.yspd + 0.21875
     
     self.character.yspd = math.min(self.character.yspd, self.character.maxYspd)

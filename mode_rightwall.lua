@@ -84,7 +84,9 @@ function ModeRightWall:updatePos()
 		self.character.grndspd = self.character.grndspd - math.min(math.abs(self.character.grndspd), friction) * sign
 	end
 	
-	if self.character.rolling then
+	if self.character.grndspd ~= 0 then
+		self.character.grndspd = self.character.grndspd + 0.125*math.sin(math.rad(-self.character.angle))
+	elseif self.character.rolling then
 		if math.getSign(self.character.grndspd) ~= math.getSign(-self.character.angle) then
 			self.character.grndspd = self.character.grndspd + 0.078125*math.sin(math.rad(-self.character.angle))
 		else
@@ -107,8 +109,7 @@ function ModeRightWall:updatePos()
 	
 	if self.character.angle <= 45 then
 		self.character:setOnFloor()
-	end
-	if math.abs(self.character.grndspd) < 2.5 then
+	elseif math.abs(self.character.grndspd) < 2.5 then
 		self.character.grndspd = 0
 		self.character:setAirborne()
 		self.character.lock = 30
@@ -152,6 +153,5 @@ function ModeRightWall:checkForGround(tiles)
     end
     if not onGround then
         self.character:setAirborne()
-        self.character.angle = 0
     end
 end

@@ -91,8 +91,9 @@ function love.update(dt)
     -- Just for the lulz
     if (level.mainChar.xpos < 0) then
 		level.mainChar.xpos = 0
-		level.mainChar.xspd = -level.mainChar.xspd
-		level.mainChar.grndspd = -level.mainChar.grndspd
+		level.mainChar.xspd = 10
+		level.mainChar.grndspd = 10
+		level.mainChar.facing = 1
     end
     
     level:preRendering()

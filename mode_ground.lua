@@ -75,7 +75,7 @@ function ModeGround:updatePos()
     if self.character.lock > 0 then
 		self.character.lock = self.character.lock - 1
     end
-	if self.character.rolling and math.abs(self.character.xspd) < 0.5 and self.character.angle < 30 then
+	if self.character.rolling and math.abs(self.character.xspd) < 0.5 then
 		self.character:unroll()
 	end
 	if (not self.isAccelerating) or self.character.rolling then
@@ -91,12 +91,12 @@ function ModeGround:updatePos()
 	end
 	
 	if self.character.grndspd ~= 0 then
-		self.character.grndspd = self.character.grndspd + 0.125*math.sin(math.rad(self.character.angle))
+		self.character.grndspd = self.character.grndspd + 0.125*math.sin(math.rad(-self.character.angle))
 	elseif self.character.rolling then
 		if math.getSign(self.character.grndspd) ~= math.getSign(self.character.angle) then
-			self.character.grndspd = self.character.grndspd + 0.078125*math.sin(math.rad(self.character.angle))
+			self.character.grndspd = self.character.grndspd + 0.078125*math.sin(math.rad(-self.character.angle))
 		else
-			self.character.grndspd = self.character.grndspd + 0.3125*math.sin(math.rad(self.character.angle))
+			self.character.grndspd = self.character.grndspd + 0.3125*math.sin(math.rad(-self.character.angle))
 		end
 	end
 	
