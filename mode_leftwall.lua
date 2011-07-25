@@ -1,21 +1,21 @@
 require "mixin"
-ModeRightWall = Mixin:create()
+ModeLeftWall = Mixin:create()
 
-ModeRightWall.acc = 0.046875
-ModeRightWall.dec = 0.5
-ModeRightWall.maxspd = 6
-ModeRightWall.isAccelerating = false
+ModeLeftWall.acc = 0.046875
+ModeLeftWall.dec = 0.5
+ModeLeftWall.maxspd = 6
+ModeLeftWall.isAccelerating = false
 
-function ModeRightWall.create(char)
+function ModeLeftWall.create(char)
 	local newMode = {}
-	ModeRightWall:mixin(newMode)
+	ModeLeftWall:mixin(newMode)
 	
 	newMode.character = char
 
 	return newMode
 end
 
-function ModeRightWall:jump()
+function ModeLeftWall:jump()
 	self.character.xspd = self.character.xspd -(6.5*-math.sin(math.rad(-self.character.angle)))
 	self.character.yspd = self.character.yspd -(6.5*math.cos(math.rad(-self.character.angle)))
 	self.character.angle = 0
@@ -23,7 +23,7 @@ function ModeRightWall:jump()
 	self.character:roll()
 end
 
-function ModeRightWall:roll()
+function ModeLeftWall:roll()
 	if not self.character.rolling then
 		if (math.abs(self.character.yspd) > 0.53125) then
 			self.character.rolling = true
@@ -33,11 +33,11 @@ function ModeRightWall:roll()
 	end
 end
 
-function ModeRightWall:stopJump()
+function ModeLeftWall:stopJump()
 
 end
 
-function ModeRightWall:moveRight()
+function ModeLeftWall:moveRight()
 	self.isAccelerating = true
 	self.character.facing = 1
 	if self.character.grndspd < 0 then
@@ -54,7 +54,7 @@ function ModeRightWall:moveRight()
 	end
 end
 
-function ModeRightWall:moveLeft()
+function ModeLeftWall:moveLeft()
 	self.isAccelerating = true
 	self.character.facing = -1
 	if self.character.grndspd > 0 then
@@ -71,7 +71,7 @@ function ModeRightWall:moveLeft()
 	end
 end
 
-function ModeRightWall:updatePos()
+function ModeLeftWall:updatePos()
 	if (not self.isAccelerating) or self.character.rolling then
 		local sign = 1
 		if self.character.grndspd < 0 then
@@ -102,11 +102,11 @@ function ModeRightWall:updatePos()
 	self.character.xpos = self.character.xpos + self.character.xspd
 	self.character.ypos = self.character.ypos + self.character.yspd
 	self.isAccelerating = false
-	
-	if self.character.angle <= 45 then
-		self.character:setOnFloor()
-	elseif self.character.angle >= 112 then
+
+	if self.character.angle <= 248 then
 		self.character.mode = self.character.modeCeiling
+	elseif self.character.angle >= 315 then
+		self.character:setOnFloor()
 	elseif math.abs(self.character.grndspd) < 2.5 then
 		self.character.grndspd = 0
 		self.character:setAirborne()
@@ -115,12 +115,12 @@ function ModeRightWall:updatePos()
 
 end
 
-function ModeRightWall:checkForGround(tiles)
+function ModeLeftWall:checkForGround(tiles)
 
 	local sensorray = 9
 	if self.character.rolling then sensorray = 7 end
-	local groundSensorBar1 = SensorRect.create(self.character,0,(self.character.height/2)+15,-sensorray,-sensorray)
-	local groundSensorBar2 = SensorRect.create(self.character,0,(self.character.height/2)+15,sensorray,sensorray)
+	local groundSensorBar1 = SensorRect.create(self.character,-(self.character.height/2)-15,0,-sensorray,-sensorray)
+	local groundSensorBar2 = SensorRect.create(self.character,-(self.character.height/2)-15,0,sensorray,sensorray)
     local onGround = false
     local minY = nil
 
@@ -133,19 +133,19 @@ function ModeRightWall:checkForGround(tiles)
 		onGround2, tilexpos2 = groundSensorBar2:isCollidingWall(tile)
 		if onGround1 then
 			if not minY then minY = tilexpos end
-			if (tilexpos <= minY) then
+			if (tilexpos >= minY) then
 				minY = tilexpos
 				self.character.angle = tile.angleWall
 			end
-			self.character.xpos = minY-(self.character.height/2)
+			self.character.xpos = minY + (self.character.height/2)
 		end
 		if onGround2 then
 			if not minY then minY = tilexpos2 end
-			if (tilexpos2 <= minY) then
+			if (tilexpos2 >= minY) then
 				minY = tilexpos2
 				self.character.angle = tile.angleWall
 			end
-			self.character.xpos = minY - (self.character.height/2)
+			self.character.xpos = minY + (self.character.height/2)
 		end
         onGround = onGround or onGround1 or onGround2
     end

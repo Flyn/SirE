@@ -3,6 +3,8 @@ require "sensor_rect"
 require "mode_air"
 require "mode_ground"
 require "mode_rightwall"
+require "mode_leftwall"
+require "mode_ceiling"
 Character = Mixin:create()
 
 Character.xpos = 0
@@ -25,6 +27,8 @@ function Character.create(sprite)
 	newChar.modeAir = ModeAir.create(newChar)
 	newChar.modeGround = ModeGround.create(newChar)
 	newChar.modeRightWall = ModeRightWall.create(newChar)
+	newChar.modeLeftWall = ModeLeftWall.create(newChar)
+	newChar.modeCeiling = ModeCeiling.create(newChar)
 	newChar.mode = newChar.modeAir
 
 	return newChar

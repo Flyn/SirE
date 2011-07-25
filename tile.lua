@@ -11,7 +11,7 @@ function Tile.createTemplate(sprite, heightmap, widthmap)
 	return newTemplate
 end
 
-function Tile.create(template, xpos, ypos)
+function Tile.create(template, xpos, ypos, flipx, flipy)
 	local newTile = {}
 	Tile:mixin(newTile)
 	
@@ -24,37 +24,78 @@ function Tile.create(template, xpos, ypos)
 	newTile.widthmap = template.widthmap or {}
 	newTile.angle = newTile.heightmap.angle or 0
 	newTile.angleWall = newTile.widthmap.angle or 90
+	if flipx then
+		newTile.angle = 360 - newTile.angle
+		newTile.angleWall = 360 - newTile.angleWall
+	end
+	if flipy then
+		if newTile.angle <= 180 then
+			newTile.angle = 180 - newTile.angle
+		else
+			newTile.angle = 180 - newTile.angle + 360
+		end
+		if newTile.angleWall <= 180 then
+			newTile.angleWall = 180 - newTile.angleWall
+		else
+			newTile.angleWall = 180 - newTile.angleWall + 360
+		end
+	end
+	newTile.flipx = flipx or false
+	newTile.flipy = flipy or false
 
 	return newTile
 end
 
 function Tile:getAbsoluteHeight(x)
 	if not x or not self.heightmap.heights then
-		return self.ypos
+		if self.flipy then
+			return self.ypos + self.sprite.height
+		else
+			return self.ypos
+		end
 	else
 		relx = math.floor(x-self.xpos) + 1
 		if (relx < 1 or relx > self.sprite.width) then
 			return nil
 		end
+		
+		if self.flipx then
+			relx = self.sprite.width+1 - relx
+		end
+		
 		rely = self.heightmap.heights[relx]
 		if rely >= self.sprite.height then
 			return nil
 		end
+		if self.flipy then
+			rely = self.sprite.height - rely
+		end
+
 		return self.ypos + rely
 	end
 end
 
 function Tile:getAbsoluteWidth(y)
 	if not y or not self.widthmap.heights then
-		return self.xpos
+		if self.flipx then
+			return self.xpos + self.sprite.width
+		else
+			return self.xpos
+		end
 	else
 		rely = math.floor(y-self.ypos) + 1
 		if (rely < 1 or rely > self.sprite.height) then
 			return nil
 		end
+		if self.flipy then
+			rely = self.sprite.height+1 - rely
+		end
 		relx = self.widthmap.heights[rely]
 		if relx >= self.sprite.width then
 			return nil
+		end
+		if self.flipx then
+			relx = self.sprite.width - relx
 		end
 		return self.xpos + relx
 	end

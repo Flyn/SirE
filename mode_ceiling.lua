@@ -1,31 +1,31 @@
 require "mixin"
-ModeRightWall = Mixin:create()
+ModeCeiling = Mixin:create()
 
-ModeRightWall.acc = 0.046875
-ModeRightWall.dec = 0.5
-ModeRightWall.maxspd = 6
-ModeRightWall.isAccelerating = false
+ModeCeiling.acc = 0.046875
+ModeCeiling.dec = 0.5
+ModeCeiling.maxspd = 6
+ModeCeiling.isAccelerating = false
 
-function ModeRightWall.create(char)
+function ModeCeiling.create(char)
 	local newMode = {}
-	ModeRightWall:mixin(newMode)
+	ModeCeiling:mixin(newMode)
 	
 	newMode.character = char
 
 	return newMode
 end
 
-function ModeRightWall:jump()
-	self.character.xspd = self.character.xspd -(6.5*-math.sin(math.rad(-self.character.angle)))
-	self.character.yspd = self.character.yspd -(6.5*math.cos(math.rad(-self.character.angle)))
+function ModeCeiling:jump()
+	self.character.xspd = self.character.xspd -(6.5*math.sin(math.rad(self.character.angle)))
+	self.character.yspd = self.character.yspd -(6.5*math.cos(math.rad(self.character.angle)))
 	self.character.angle = 0
 	self.character:setAirborne()
 	self.character:roll()
 end
 
-function ModeRightWall:roll()
+function ModeCeiling:roll()
 	if not self.character.rolling then
-		if (math.abs(self.character.yspd) > 0.53125) then
+		if (math.abs(self.character.xspd) > 0.53125) then
 			self.character.rolling = true
 			self.character.ypos = self.character.ypos + 5
 			self.character.height = 30
@@ -33,11 +33,11 @@ function ModeRightWall:roll()
 	end
 end
 
-function ModeRightWall:stopJump()
+function ModeCeiling:stopJump()
 
 end
 
-function ModeRightWall:moveRight()
+function ModeCeiling:moveRight()
 	self.isAccelerating = true
 	self.character.facing = 1
 	if self.character.grndspd < 0 then
@@ -54,7 +54,7 @@ function ModeRightWall:moveRight()
 	end
 end
 
-function ModeRightWall:moveLeft()
+function ModeCeiling:moveLeft()
 	self.isAccelerating = true
 	self.character.facing = -1
 	if self.character.grndspd > 0 then
@@ -71,7 +71,7 @@ function ModeRightWall:moveLeft()
 	end
 end
 
-function ModeRightWall:updatePos()
+function ModeCeiling:updatePos()
 	if (not self.isAccelerating) or self.character.rolling then
 		local sign = 1
 		if self.character.grndspd < 0 then
@@ -87,13 +87,13 @@ function ModeRightWall:updatePos()
 	if self.character.grndspd ~= 0 then
 		self.character.grndspd = self.character.grndspd + 0.125*math.sin(math.rad(-self.character.angle))
 	elseif self.character.rolling then
-		if math.getSign(self.character.grndspd) ~= math.getSign(-self.character.angle) then
+		if math.getSign(self.character.grndspd) ~= math.getSign(self.character.angle) then
 			self.character.grndspd = self.character.grndspd + 0.078125*math.sin(math.rad(-self.character.angle))
 		else
 			self.character.grndspd = self.character.grndspd + 0.3125*math.sin(math.rad(-self.character.angle))
 		end
 	end
-
+	
 	self.character.xspd = self.character.grndspd * math.cos(math.rad(self.character.angle))
 	self.character.yspd = self.character.grndspd * -math.sin(math.rad(self.character.angle))
     
@@ -102,50 +102,49 @@ function ModeRightWall:updatePos()
 	self.character.xpos = self.character.xpos + self.character.xspd
 	self.character.ypos = self.character.ypos + self.character.yspd
 	self.isAccelerating = false
-	
-	if self.character.angle <= 45 then
-		self.character:setOnFloor()
-	elseif self.character.angle >= 112 then
-		self.character.mode = self.character.modeCeiling
+	if self.character.angle <= 112 then
+		self.character.mode = self.character.modeRightWall
+	elseif self.character.angle >= 248 then
+		self.character.mode = self.character.modeLeftWall
 	elseif math.abs(self.character.grndspd) < 2.5 then
 		self.character.grndspd = 0
 		self.character:setAirborne()
 		self.character.lock = 30
 	end
-
+	
 end
 
-function ModeRightWall:checkForGround(tiles)
+function ModeCeiling:checkForGround(tiles)
 
 	local sensorray = 9
 	if self.character.rolling then sensorray = 7 end
-	local groundSensorBar1 = SensorRect.create(self.character,0,(self.character.height/2)+15,-sensorray,-sensorray)
-	local groundSensorBar2 = SensorRect.create(self.character,0,(self.character.height/2)+15,sensorray,sensorray)
+	local groundSensorBar1 = SensorRect.create(self.character,-sensorray,-sensorray,-(self.character.height/2)-15,0)
+	local groundSensorBar2 = SensorRect.create(self.character,sensorray,sensorray,-(self.character.height/2)-15,0)
     local onGround = false
     local minY = nil
 
 	for i,tile in ipairs(tiles) do
 		local onGround1 = false
 		local onGround2 = false
-		local tilexpos = false
-		local tilexpos2 = false
-		onGround1, tilexpos = groundSensorBar1:isCollidingWall(tile)
-		onGround2, tilexpos2 = groundSensorBar2:isCollidingWall(tile)
+		local tileypos = false
+		local tileypos2 = false
+		onGround1, tileypos = groundSensorBar1:isColliding(tile)
+		onGround2, tileypos2 = groundSensorBar2:isColliding(tile)
 		if onGround1 then
-			if not minY then minY = tilexpos end
-			if (tilexpos <= minY) then
-				minY = tilexpos
-				self.character.angle = tile.angleWall
+			if not minY then minY = tileypos end
+			if (tileypos >= minY) then
+				minY = tileypos
+				self.character.angle = tile.angle
 			end
-			self.character.xpos = minY-(self.character.height/2)
+			self.character.ypos = minY + (self.character.height/2)
 		end
 		if onGround2 then
-			if not minY then minY = tilexpos2 end
-			if (tilexpos2 <= minY) then
-				minY = tilexpos2
-				self.character.angle = tile.angleWall
+			if not minY then minY = tileypos2 end
+			if (tileypos2 >= minY) then
+				minY = tileypos2
+				self.character.angle = tile.angle
 			end
-			self.character.xpos = minY - (self.character.height/2)
+			self.character.ypos = minY + (self.character.height/2)
 		end
         onGround = onGround or onGround1 or onGround2
     end

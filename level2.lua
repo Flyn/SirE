@@ -7,7 +7,7 @@ function Level2:createTiles()
 
 	local tileImg = love.graphics.newImage("level2_tiles.tga")
 	tileImg:setFilter("nearest","nearest")
-	self.tilesetBatch = love.graphics.newSpriteBatch(tileImg, 200)
+	self.tilesetBatch = love.graphics.newSpriteBatch(tileImg, 250)
 	
 	local floorhm = TileHeightmap.create({15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15}, 0)
 	
@@ -23,8 +23,9 @@ function Level2:createTiles()
 		end
     end
     
-    self.chunks[1][15] = floor_chunk
-    self.chunks[6][15] = floor_chunk
+    self.chunks[1][20] = floor_chunk
+    self.chunks[6][20] = floor_chunk
+    self.chunks[11][20] = floor_chunk
     
     slope_chunk = TileChunk.create(4, 4)
     
@@ -46,20 +47,84 @@ function Level2:createTiles()
 	slope_chunk:setTile(3, 2, slope_3_2)
 	slope_chunk:setTile(3, 3, slope_3_3)
 
-	self.chunks[11][12] = slope_chunk
+	self.chunks[15][17] = slope_chunk
 	
-	wall_chunk = TileChunk.create(4, 5)
+	slope_chunk2 = TileChunk.create(4, 4)
+	
+	slope_chunk2:setTile(0, 0, slope_0_3, false, true)
+	slope_chunk2:setTile(1, 0, slope_1_3, false, true)
+	slope_chunk2:setTile(2, 1, slope_2_2, false, true)
+	slope_chunk2:setTile(2, 0, slope_2_3, false, true)
+	slope_chunk2:setTile(3, 3, slope_3_0, false, true)
+	slope_chunk2:setTile(3, 2, slope_3_1, false, true)
+	slope_chunk2:setTile(3, 1, slope_3_2, false, true)
+	slope_chunk2:setTile(3, 0, slope_3_3, false, true)
+	
+	self.chunks[15][7] = slope_chunk2
+	
+	rwall_chunk = TileChunk.create(4, 5)
 	for x = 0,4 do
 		for y = 0,4 do
-			wall_chunk:setTile(x, y, floor_body)
+			rwall_chunk:setTile(x, y, floor_body)
 		end
 	end
 	
-	self.chunks[11][16] = wall_chunk
-	self.chunks[15][7] = wall_chunk
-	self.chunks[15][12] = wall_chunk
-	self.chunks[15][16] = wall_chunk
-	--self.chunks[15][6] = floor_chunk
+	self.chunks[15][21] = rwall_chunk
+	self.chunks[19][12] = rwall_chunk
+	self.chunks[19][17] = rwall_chunk
+	self.chunks[19][21] = rwall_chunk
+	self.chunks[19][7] = rwall_chunk
+	
+	ceil_chunk = TileChunk.create(4, 5)
+	for x = 0,4 do
+		for y = 0,4 do
+			ceil_chunk:setTile(x, y, floor_body, false, true)
+		end
+	end
+	
+	self.chunks[19][2] = ceil_chunk
+	self.chunks[15][2] = ceil_chunk
+	self.chunks[11][2] = ceil_chunk
+	self.chunks[7][2] = ceil_chunk
+	
+	slope_chunk3 = TileChunk.create(4, 4)
+	
+	slope_chunk3:setTile(3, 0, slope_0_3, true, true)
+	slope_chunk3:setTile(2, 0, slope_1_3, true, true)
+	slope_chunk3:setTile(1, 1, slope_2_2, true, true)
+	slope_chunk3:setTile(1, 0, slope_2_3, true, true)
+	slope_chunk3:setTile(0, 3, slope_3_0, true, true)
+	slope_chunk3:setTile(0, 2, slope_3_1, true, true)
+	slope_chunk3:setTile(0, 1, slope_3_2, true, true)
+	slope_chunk3:setTile(0, 0, slope_3_3, true, true)
+	
+	self.chunks[7][7] = slope_chunk3
+	
+	lwall_chunk = TileChunk.create(4, 5)
+	for x = 0,4 do
+		for y = 0,4 do
+			lwall_chunk:setTile(x, y, floor_body, true, false)
+		end
+	end
+	
+	self.chunks[3][2] = lwall_chunk
+	self.chunks[3][7] = lwall_chunk
+	self.chunks[3][11] = lwall_chunk
+	self.chunks[3][16] = lwall_chunk
+	
+	slope_chunk4 = TileChunk.create(4, 4)
+	
+	slope_chunk4:setTile(3, 3, slope_0_3, true, false)
+	slope_chunk4:setTile(2, 3, slope_1_3, true, false)
+	slope_chunk4:setTile(1, 2, slope_2_2, true, false)
+	slope_chunk4:setTile(1, 3, slope_2_3, true, false)
+	slope_chunk4:setTile(0, 0, slope_3_0, true, false)
+	slope_chunk4:setTile(0, 1, slope_3_1, true, false)
+	slope_chunk4:setTile(0, 2, slope_3_2, true, false)
+	slope_chunk4:setTile(0, 3, slope_3_3, true, false)
+	
+	self.chunks[7][17] = slope_chunk4
+	
 end
 
 function Level2:createObjects()
@@ -71,6 +136,6 @@ function Level2:createObjects()
 end
 
 function Level2:populateLevel()
-	self.mainChar.xpos = 20
-	self.mainChar.ypos = 20
+	self.mainChar.xpos = 200
+	self.mainChar.ypos = 200
 end

@@ -33,7 +33,7 @@ function Level:generateTiles()
 				for y, tile in pairs(tilesx) do
 					local absx = (x - 1) + (worldx - 1)
 					local absy = (y - 1) + (worldy - 1)
-					table.insert(self.tiles, Tile.create(tile, absx*16, absy*16))
+					table.insert(self.tiles, Tile.create(tile, absx*16, absy*16, chunk.flipx[x][y], chunk.flipy[x][y]))
 				end
 			end
 		end
@@ -60,9 +60,15 @@ function Level:preRendering()
         self.tilesetBatch:clear()
     
         for i,tile in pairs(self.tiles) do
+        
+			local scalex = 1
+			local scaley = 1
+			if tile.flipx then scalex = -1 end
+			if tile.flipy then scaley = -1 end
+        
 			if (tile.xpos >= gameCamera.xpos-20 and tile.xpos < gameCamera.xpos+gameCamera:getZoomedWidth()+20)
 			and (tile.ypos >= gameCamera.ypos-20 and tile.ypos < gameCamera.ypos+gameCamera:getZoomedHeight()+20) then
-				self.tilesetBatch:addq(tile.sprite.quad, tile.xpos, tile.ypos)
+				self.tilesetBatch:addq(tile.sprite.quad, tile.xpos+tile.width/2, tile.ypos+tile.height/2, nil, scalex, scaley, tile.width/2, tile.height/2)
             end
         end
         

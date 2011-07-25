@@ -11,9 +11,13 @@ function TileChunk.create(w, h)
 	newTileChunk.width  = w
 	newTileChunk.height = h
     newTileChunk.tiles = {}
+    newTileChunk.flipx = {}
+    newTileChunk.flipy = {}
 	
 	for x = 1, w do
 		newTileChunk.tiles[x] = {}
+		newTileChunk.flipx[x] = {}
+		newTileChunk.flipy[x] = {}
 	end
 
 	return newTileChunk
@@ -36,10 +40,12 @@ function TileChunk.autoCreate(tileImage, xmin, ymin, width, height, heightmap)
 	return newTileChunk
 end
 
-function TileChunk:setTile(x, y, tile)
+function TileChunk:setTile(x, y, tile, flipx, flipy)
 	if (x < self.width) and (y < self.height) then
 		x = x+1
 		y = y+1
 		self.tiles[x][y] = tile
+		self.flipx[x][y] = flipx or false
+		self.flipy[x][y] = flipy or false
 	end
 end
