@@ -55,9 +55,6 @@ function love.update(dt)
 	        if love.keyboard.isDown("escape") then
 	            os.exit(0)
 	        end
-	        if love.keyboard.isDown("d") then
-	            debug:debug()
-	        end
 	        if love.keyboard.isDown("kp+") then
 	            speed = speed+1
 	        end
@@ -104,6 +101,9 @@ function love.keypressed(key)
 	if key == " " then
 		level.mainChar:jump()
 	end
+	if key == "d" then
+        debug:debug()
+    end
 	if key == "f1" then
 		levelnum = (levelnum+1)%#levels
 		level = levels[levelnum+1]

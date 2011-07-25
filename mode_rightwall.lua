@@ -93,11 +93,7 @@ function ModeRightWall:updatePos()
 			self.character.grndspd = self.character.grndspd + 0.3125*math.sin(math.rad(-self.character.angle))
 		end
 	end
-	
-	if self.character.angle == 0 then
-		self.character.angle = 90
-	end
-	
+
 	self.character.xspd = self.character.grndspd * math.cos(math.rad(self.character.angle))
 	self.character.yspd = self.character.grndspd * -math.sin(math.rad(self.character.angle))
     
