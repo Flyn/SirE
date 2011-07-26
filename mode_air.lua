@@ -102,13 +102,13 @@ function ModeAir:checkForGround(tiles)
 						if math.abs(self.character.xspd) > self.character.yspd then
 							self.character.grndspd = self.character.xspd
 						else
-							self.character.grndspd = self.character.yspd*0.5*-math.getSign(math.cos(math.rad(-self.character.angle)))
+							self.character.grndspd = self.character.yspd*0.5*-math.getSign(math.sin(math.rad(self.character.angle)))
 						end
 					elseif (self.character.angle >= 45 and self.character.angle < 90) or (self.character.angle <= -45 and self.character.angle > -90) then
 						if math.abs(self.character.xspd) > self.character.yspd then
 							self.character.grndspd = self.character.xspd
 						else
-							self.character.grndspd = self.character.yspd*-math.getSign(math.cos(math.rad(-self.character.angle)))
+							self.character.grndspd = self.character.yspd*-math.getSign(math.sin(math.rad(self.character.angle)))
 						end
 					end
 	                self.character:setOnFloor()

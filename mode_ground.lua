@@ -109,9 +109,9 @@ function ModeGround:updatePos()
 	self.character.ypos = self.character.ypos + self.character.yspd
 	self.isAccelerating = false
 	
-	if self.character.angle > 45 and self.character.angle < 315 then
+	if self.character.angle > 45 then
 		self.character.mode = self.character.modeRightWall
-	elseif self.character.angle <= 315 and self.character.angle > 45 then
+	elseif self.character.angle <= -65 then
 		self.character.mode = self.character.modeLeftWall
 	end
 end

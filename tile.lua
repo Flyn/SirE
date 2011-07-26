@@ -25,20 +25,17 @@ function Tile.create(template, xpos, ypos, flipx, flipy)
 	newTile.angle = newTile.heightmap.angle or 0
 	newTile.angleWall = newTile.widthmap.angle or 90
 	if flipx then
-		newTile.angle = 360 - newTile.angle
-		newTile.angleWall = 360 - newTile.angleWall
+		newTile.angle = - newTile.angle
+		newTile.angleWall = - newTile.angleWall
 	end
 	if flipy then
-		if newTile.angle <= 180 then
-			newTile.angle = 180 - newTile.angle
-		else
-			newTile.angle = 180 - newTile.angle + 360
-		end
-		if newTile.angleWall <= 180 then
-			newTile.angleWall = 180 - newTile.angleWall
-		else
-			newTile.angleWall = 180 - newTile.angleWall + 360
-		end
+        if (newTile.angle >= 0) then
+            newTile.angle = 180 - newTile.angle
+            newTile.angleWall = 180 - newTile.angleWall
+        else
+            newTile.angle = - 180 - newTile.angle
+            newTile.angleWall = - 180 - newTile.angleWall
+        end
 	end
 	newTile.flipx = flipx or false
 	newTile.flipy = flipy or false

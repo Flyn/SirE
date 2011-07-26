@@ -103,9 +103,9 @@ function ModeLeftWall:updatePos()
 	self.character.ypos = self.character.ypos + self.character.yspd
 	self.isAccelerating = false
 
-	if self.character.angle <= 248 then
+	if self.character.angle <= -112 then
 		self.character.mode = self.character.modeCeiling
-	elseif self.character.angle >= 315 then
+	elseif self.character.angle >= -65 then
 		self.character:setOnFloor()
 	elseif math.abs(self.character.grndspd) < 2.5 then
 		self.character.grndspd = 0
@@ -117,7 +117,7 @@ end
 
 function ModeLeftWall:checkForGround(tiles)
 
-	local sensorray = 9
+    local sensorray = 9
 	if self.character.rolling then sensorray = 7 end
 	local groundSensorBar1 = SensorRect.create(self.character,-(self.character.height/2)-15,0,-sensorray,-sensorray)
 	local groundSensorBar2 = SensorRect.create(self.character,-(self.character.height/2)-15,0,sensorray,sensorray)

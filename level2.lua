@@ -7,7 +7,7 @@ function Level2:createTiles()
 
 	local tileImg = love.graphics.newImage("level2_tiles.tga")
 	tileImg:setFilter("nearest","nearest")
-	self.tilesetBatch = love.graphics.newSpriteBatch(tileImg, 250)
+	self.tilesetBatch = love.graphics.newSpriteBatch(tileImg, 400)
 	
 	local floorhm = TileHeightmap.create({15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15}, 0)
 	
