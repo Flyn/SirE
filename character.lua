@@ -16,6 +16,7 @@ Character.maxYspd = 10
 Character.angle = 0
 Character.facing = 1
 Character.rolling = false
+Character.width = 20
 Character.height = 40
 Character.lock = 0
 Character.layer = 1
@@ -114,6 +115,17 @@ function Character:physicsStep(tiles)
     self:isBumpingTiles(tiles[self.layer])
     self:checkForCeiling(tiles[self.layer])
     self.mode:checkForGround(tiles[self.layer])
+end
+
+function Character:triggerObjects(triggers)
+	if triggers then
+		for i, trigger in pairs(triggers) do
+			local charSensor = SensorRect.create(self)
+			if (charSensor:isCollidingObject(trigger)) then
+				trigger:trigger()
+			end
+		end
+	end
 end
 
 function Character:updateSprite(dt)

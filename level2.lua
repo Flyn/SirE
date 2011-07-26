@@ -1,4 +1,5 @@
 require "level"
+require "layer_trigger"
 Level2 = Level:create()
 
 Level2.title = "Wall Level"
@@ -136,6 +137,12 @@ function Level2:createObjects()
 	local mainChar = Character.create(mainCharSprite)
 	table.insert(self.objects, mainChar)
 	self.mainChar = mainChar
+	
+	self.triggers = {}
+	
+	local layertrigger = LayerTrigger.create(16*12, 6*16, 32, 96, 2, 1)
+	layertrigger:setTarget(mainChar)
+	table.insert(self.triggers, layertrigger)
 end
 
 function Level2:populateLevel()

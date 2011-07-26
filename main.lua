@@ -66,6 +66,7 @@ function love.update(dt)
 	        speed = math.min(600, speed)
 	        
 	        level.mainChar:physicsStep(level.tileCollisions)
+	        level.mainChar:triggerObjects(level.triggers)
 	    
 	    end
 	    level.mainChar:updateSprite(1/60)
