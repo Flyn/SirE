@@ -25,7 +25,8 @@ end
 
 function Level:generateTiles()
 
-	self.tiles = {}
+	self.tiles = {{},{}}
+	self.tileCollisions = {{},{}}
 
 	for worldx,xchunks in pairs(self.chunks) do
 		for worldy,chunk in pairs(xchunks) do
@@ -33,7 +34,13 @@ function Level:generateTiles()
 				for y, tile in pairs(tilesx) do
 					local absx = (x - 1) + (worldx - 1)
 					local absy = (y - 1) + (worldy - 1)
-					table.insert(self.tiles, Tile.create(tile, absx*16, absy*16, chunk.flipx[x][y], chunk.flipy[x][y]))
+					local newTile = Tile.create(tile, absx*16, absy*16, chunk.flipx[x][y], chunk.flipy[x][y], chunk.priority[x][y], chunk.layers[1][x][y], chunk.layers[2][x][y])
+					table.insert(self.tiles[newTile.priority], newTile)
+					for layer, appear in ipairs(newTile.layers) do
+						if appear then
+							table.insert(self.tileCollisions[layer], newTile)
+						end
+					end
 				end
 			end
 		end
@@ -57,30 +64,42 @@ end
 
 function Level:preRendering()
     if self.tilesetBatch then
-        self.tilesetBatch:clear()
-    
-        for i,tile in pairs(self.tiles) do
-        
-			local scalex = 1
-			local scaley = 1
-			if tile.flipx then scalex = -1 end
-			if tile.flipy then scaley = -1 end
-        
-			if (tile.xpos >= gameCamera.xpos-20 and tile.xpos < gameCamera.xpos+gameCamera:getZoomedWidth()+20)
-			and (tile.ypos >= gameCamera.ypos-20 and tile.ypos < gameCamera.ypos+gameCamera:getZoomedHeight()+20) then
-				self.tilesetBatch:addq(tile.sprite.quad, tile.xpos+tile.width/2, tile.ypos+tile.height/2, nil, scalex, scaley, tile.width/2, tile.height/2)
-            end
+		for priority, batch in pairs(self.tilesetBatch) do
+	        batch:clear()
+	    
+	        for i,tile in pairs(self.tiles[priority]) do
+	        
+				local scalex = 1
+				local scaley = 1
+				if tile.flipx then scalex = -1 end
+				if tile.flipy then scaley = -1 end
+	        
+				if (tile.xpos >= gameCamera.xpos-20 and tile.xpos < gameCamera.xpos+gameCamera:getZoomedWidth()+20)
+				and (tile.ypos >= gameCamera.ypos-20 and tile.ypos < gameCamera.ypos+gameCamera:getZoomedHeight()+20) then
+					batch:addq(tile.sprite.quad, tile.xpos+tile.width/2, tile.ypos+tile.height/2, nil, scalex, scaley, tile.width/2, tile.height/2)
+	            end
+	        end
         end
-        
     end
 end
 
 function Level:render()
+
+    if self.tilesetBatch then
+		if self.tilesetBatch[1] then
+			love.graphics.setColor(200,200,200)
+			gameCamera:draw(self.tilesetBatch[1])
+			love.graphics.setColor(255,255,255)
+        end
+    end
+
     for i,object in ipairs(self.objects) do
 		object:renderSprite()
     end
     
     if self.tilesetBatch then
-        gameCamera:draw(self.tilesetBatch)
+		if self.tilesetBatch[2] then
+			gameCamera:draw(self.tilesetBatch[2])
+        end
     end
 end

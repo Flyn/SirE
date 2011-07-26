@@ -7,11 +7,11 @@ function Level1:createTiles()
 
 	local tileImg = love.graphics.newImage("level1_tiles.tga")
 	tileImg:setFilter("nearest","nearest")
-	self.tilesetBatch = love.graphics.newSpriteBatch(tileImg, 150)
+	self.tilesetBatch = {nil, love.graphics.newSpriteBatch(tileImg, 150)}
 	
 	local defaulthm = TileHeightmap.create({5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5}, 0)
-	
-	local basic_chunk = TileChunk.autoCreate(tileImg, 0, 0, 2, 3, defaulthm)
+
+	local basic_chunk = TileChunk.autoCreate(tileImg, 0, 0, 2, 3, defaulthm, 2)
 
 	for i = 3,10 do
 		self.chunks[i*2][8] = basic_chunk
@@ -46,11 +46,11 @@ function Level1:createTiles()
     slopes_tiles[4] = Tile.createTemplate(slopes_sprites[4], slopes_hm[4])
     slopes_tiles[5] = Tile.createTemplate(slopes_sprites[4], slopes_hm[5])
     
-    slopes_chunk:setTile(0, 0, slopes_tiles[5])
-    slopes_chunk:setTile(1, 0, slopes_tiles[1])
-    slopes_chunk:setTile(2, 0, slopes_tiles[2])
-    slopes_chunk:setTile(3, 0, slopes_tiles[3])
-    slopes_chunk:setTile(4, 0, slopes_tiles[4])
+    slopes_chunk:setTile(0, 0, slopes_tiles[5], nil, nil, 2)
+    slopes_chunk:setTile(1, 0, slopes_tiles[1], nil, nil, 2)
+    slopes_chunk:setTile(2, 0, slopes_tiles[2], nil, nil, 2)
+    slopes_chunk:setTile(3, 0, slopes_tiles[3], nil, nil, 2)
+    slopes_chunk:setTile(4, 0, slopes_tiles[4], nil, nil, 2)
     
     for i = 8,40,5 do
         self.chunks[i][15] = slopes_chunk

@@ -65,7 +65,7 @@ function love.update(dt)
 	        speed = math.max(10, speed)
 	        speed = math.min(600, speed)
 	        
-	        level.mainChar:physicsStep(level.tiles)
+	        level.mainChar:physicsStep(level.tileCollisions)
 	    
 	    end
 	    level.mainChar:updateSprite(1/60)
@@ -159,15 +159,17 @@ function love.draw()
         gameCamera:point(level.mainChar.xpos, level.mainChar.ypos+4)
         love.graphics.setColor(255,255,255)
         
-        for i,tile in ipairs(level.tiles) do
-            for i = 0, (tile.width-1) do
-                love.graphics.setColor(0,0,255)
-                gameCamera:point(tile.xpos+i, tile:getAbsoluteHeight(tile.xpos+i))
-                love.graphics.setColor(0,255,0)
-                gameCamera:point(tile:getAbsoluteWidth(tile.ypos+i), tile.ypos+i)
-                love.graphics.setColor(255,255,255)
-            end
-        end
+        for priority, tiles in ipairs(level.tiles) do
+			for i,tile in ipairs(tiles) do
+				for i = 0, (tile.width-1) do
+					love.graphics.setColor(0,0,255)
+					gameCamera:point(tile.xpos+i, tile:getAbsoluteHeight(tile.xpos+i))
+					love.graphics.setColor(0,255,0)
+					gameCamera:point(tile:getAbsoluteWidth(tile.ypos+i), tile.ypos+i)
+					love.graphics.setColor(255,255,255)
+				end
+			end
+		end
     else
 		love.graphics.print("FPS: "..love.timer.getFPS(), 0, 0)
     end

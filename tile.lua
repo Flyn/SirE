@@ -11,7 +11,7 @@ function Tile.createTemplate(sprite, heightmap, widthmap)
 	return newTemplate
 end
 
-function Tile.create(template, xpos, ypos, flipx, flipy)
+function Tile.create(template, xpos, ypos, flipx, flipy, priority, layer1, layer2)
 	local newTile = {}
 	Tile:mixin(newTile)
 	
@@ -39,7 +39,9 @@ function Tile.create(template, xpos, ypos, flipx, flipy)
 	end
 	newTile.flipx = flipx or false
 	newTile.flipy = flipy or false
-
+	newTile.priority = priority or 1
+	newTile.layers = {layer1, layer2}
+	
 	return newTile
 end
 

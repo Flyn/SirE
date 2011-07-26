@@ -18,6 +18,7 @@ Character.facing = 1
 Character.rolling = false
 Character.height = 40
 Character.lock = 0
+Character.layer = 1
 
 function Character.create(sprite)
 	local newChar = {}
@@ -110,9 +111,9 @@ end
 
 function Character:physicsStep(tiles)
 	self.mode:updatePos()
-    self:isBumpingTiles(tiles)
-    self:checkForCeiling(tiles)
-    self.mode:checkForGround(tiles)
+    self:isBumpingTiles(tiles[self.layer])
+    self:checkForCeiling(tiles[self.layer])
+    self.mode:checkForGround(tiles[self.layer])
 end
 
 function Character:updateSprite(dt)

@@ -7,8 +7,8 @@ function Level3:createTiles()
 
 	local tileImg = love.graphics.newImage("level1_tiles.tga")
 	tileImg:setFilter("nearest","nearest")
-	self.tilesetBatch = love.graphics.newSpriteBatch(tileImg, 150)
-	
+	self.tilesetBatch = {love.graphics.newSpriteBatch(tileImg, 150)}
+		
 	local defaulthm = TileHeightmap.create({5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5}, 0)
 	
 	local basic_chunk = TileChunk.autoCreate(tileImg, 0, 0, 2, 3, defaulthm)
