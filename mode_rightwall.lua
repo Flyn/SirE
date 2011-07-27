@@ -105,7 +105,7 @@ function ModeRightWall:updatePos()
 	
 	if self.character.angle <= 45 then
 		self.character:setOnFloor()
-	elseif self.character.angle >= 112 then
+	elseif self.character.angle >= 135 then
 		self.character.mode = self.character.modeCeiling
 	elseif math.abs(self.character.grndspd) < 2.5 then
 		self.character.grndspd = 0

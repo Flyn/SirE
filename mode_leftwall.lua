@@ -103,9 +103,9 @@ function ModeLeftWall:updatePos()
 	self.character.ypos = self.character.ypos + self.character.yspd
 	self.isAccelerating = false
 
-	if self.character.angle <= -112 then
+	if self.character.angle <= -135 then
 		self.character.mode = self.character.modeCeiling
-	elseif self.character.angle >= -65 then
+	elseif self.character.angle >= -45 then
 		self.character:setOnFloor()
 	elseif math.abs(self.character.grndspd) < 2.5 then
 		self.character.grndspd = 0

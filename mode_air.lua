@@ -63,6 +63,26 @@ function ModeAir:updatePos()
 	self.character.ypos = self.character.ypos + self.character.yspd
 end
 
+function ModeAir:checkForCeiling(tiles)
+	local sensorray = 9
+	if self.character.rolling then sensorray = 7 end
+	local ceilingSensorBar1 = SensorRect.create(self.character,-sensorray,-sensorray,-(self.character.height/2)-15,0)
+	local ceilingSensorBar2 = SensorRect.create(self.character,sensorray,sensorray,-(self.character.height/2)-15,0)
+	local touchCeiling = false
+	for i,tile in ipairs(tiles) do
+		if self.character.ypos < (tile.ypos + tile.height -1 + (self.character.height/2)) then
+			local touchCeiling1 = ceilingSensorBar1:isColliding(tile)
+			local touchCeiling2 = ceilingSensorBar2:isColliding(tile)
+			if(touchCeiling1 or touchCeiling2) then
+					self.character.ypos = tile.ypos + tile.height + 1 + (self.character.height/2)
+	                self.character.yspd = 0
+			end
+			touchCeiling = touchCeiling or touchCeiling1 or touchCeiling2
+		end
+	end
+end
+
+
 function ModeAir:checkForGround(tiles)
 	local sensorray = 9
 	if self.character.rolling then sensorray = 7 end

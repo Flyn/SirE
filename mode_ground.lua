@@ -111,7 +111,7 @@ function ModeGround:updatePos()
 	
 	if self.character.angle > 45 then
 		self.character.mode = self.character.modeRightWall
-	elseif self.character.angle <= -65 then
+	elseif self.character.angle < -45 then
 		self.character.mode = self.character.modeLeftWall
 	end
 end

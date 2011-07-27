@@ -102,7 +102,7 @@ function ModeCeiling:updatePos()
 	self.character.xpos = self.character.xpos + self.character.xspd
 	self.character.ypos = self.character.ypos + self.character.yspd
 	self.isAccelerating = false
-	if self.character.angle <= 112 and self.character.angle > 0 then
+	if self.character.angle <= 135 and self.character.angle > 0 then
 		self.character.mode = self.character.modeRightWall
 	elseif self.character.angle >= -112 and self.character.angle < 0 then
 		self.character.mode = self.character.modeLeftWall
