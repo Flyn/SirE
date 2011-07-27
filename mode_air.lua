@@ -53,7 +53,7 @@ end
 
 function ModeAir:updatePos()
 	if self.character.angle ~= 0 then
-		self.character.angle = self.character.angle - 3*math.getSign(self.character.angle)
+		self.character.angle = self.character.angle - 6*math.getSign(self.character.angle)
 	end
     self.character.yspd = self.character.yspd + 0.21875
     
