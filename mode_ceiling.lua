@@ -108,6 +108,8 @@ function ModeCeiling:updatePos()
 		self.character.mode = self.character.modeLeftWall
 	elseif math.abs(self.character.grndspd) < 2.5 then
 		self.character.grndspd = 0
+        self.character.angle = 0
+        self.character.facing = -self.character.facing
 		self.character:setAirborne()
 		self.character.lock = 30
 	end
@@ -149,6 +151,8 @@ function ModeCeiling:checkForGround(tiles)
         onGround = onGround or onGround1 or onGround2
     end
     if not onGround then
+        self.character.facing = -self.character.facing
+        self.character.angle = 0
         self.character:setAirborne()
     end
 end

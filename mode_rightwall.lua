@@ -109,6 +109,10 @@ function ModeRightWall:updatePos()
 		self.character.mode = self.character.modeCeiling
 	elseif math.abs(self.character.grndspd) < 2.5 then
 		self.character.grndspd = 0
+        if self.character.angle > 90 then
+            self.character.angle = 0
+            self.character.facing = -self.character.facing
+        end
 		self.character:setAirborne()
 		self.character.lock = 30
 	end
@@ -150,6 +154,10 @@ function ModeRightWall:checkForGround(tiles)
         onGround = onGround or onGround1 or onGround2
     end
     if not onGround then
+        if self.character.angle > 90 then
+            self.character.angle = 0
+            self.character.facing = -self.character.facing
+        end
         self.character:setAirborne()
     end
 end
