@@ -5,6 +5,7 @@ ModeCeiling.acc = 0.046875
 ModeCeiling.dec = 0.5
 ModeCeiling.maxspd = 6
 ModeCeiling.isAccelerating = false
+ModeCeiling.name = "Ceiling" -- Just used for debug
 
 function ModeCeiling.create(char)
 	local newMode = {}

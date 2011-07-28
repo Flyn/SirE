@@ -5,6 +5,7 @@ ModeGround.acc = 0.046875
 ModeGround.dec = 0.5
 ModeGround.maxspd = 6
 ModeGround.isAccelerating = false
+ModeGround.name = "Ground" -- Just used for debug
 
 function ModeGround.create(char)
 	local newMode = {}

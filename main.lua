@@ -151,7 +151,7 @@ function love.draw()
     
 	if hud then
         love.graphics.print("Physics demo\n"..level.title.." Speed: "..speed.." FPS: "..love.timer.getFPS().."\nF1 to switch levels, R to reload level".."\nLeft/Right to move\nLeft click to spawn player\nRight Click to zoom\nEscape to quit", 0, 0)
-        love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nAngle:"..level.mainChar.angle, 200, 0)
+        love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nMode:"..level.mainChar.mode.name.."\nAngle:"..level.mainChar.angle, 200, 0)
         love.graphics.print("XSpeed:"..level.mainChar.xspd.."\nYSpeed:"..level.mainChar.yspd, 400, 0)
         
         love.graphics.scale(gameCamera:getZoomedRatio())
@@ -159,6 +159,14 @@ function love.draw()
 		love.graphics.setColor(0,255,0)
         gameCamera:point(level.mainChar.xpos, level.mainChar.ypos+4)
         love.graphics.setColor(255,255,255)
+        
+        if level.triggers then
+            for i,trigger in ipairs(level.triggers) do
+                love.graphics.setColor(0,255,255,60)
+                gameCamera:rectangle(trigger.xpos, trigger.ypos, trigger.width, trigger.height)
+                love.graphics.setColor(255,255,255,255)
+            end
+        end
         
         for priority, tiles in ipairs(level.tiles) do
 			for i,tile in ipairs(tiles) do

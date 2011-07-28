@@ -108,3 +108,9 @@ function Camera:point(x, y, ...)
 	y = y or 0
 	love.graphics.point(x - self.xpos, y - self.ypos, ...)
 end
+
+function Camera:rectangle(x, y, ...)
+	x = x or 0
+	y = y or 0
+	love.graphics.rectangle("fill", x - self.xpos, y - self.ypos, ...)
+end

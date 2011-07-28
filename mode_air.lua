@@ -3,6 +3,7 @@ ModeAir = Mixin:create()
 
 ModeAir.air = 0.09375
 ModeAir.maxspd = 6
+ModeAir.name = "Air" -- Just used for debug
 
 function ModeAir.create(char)
 	local newMode = {}

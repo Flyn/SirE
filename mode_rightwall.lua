@@ -5,6 +5,7 @@ ModeRightWall.acc = 0.046875
 ModeRightWall.dec = 0.5
 ModeRightWall.maxspd = 6
 ModeRightWall.isAccelerating = false
+ModeRightWall.name = "RightWall" -- Just used for debug
 
 function ModeRightWall.create(char)
 	local newMode = {}
