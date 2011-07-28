@@ -1,10 +1,11 @@
 require "mixin"
 Tile = Mixin:create()
 
-function Tile.createTemplate(sprite, heightmap, widthmap)
+function Tile.createTemplate(sprite, angle, heightmap, widthmap)
 	local newTemplate = {}
 	
 	newTemplate.sprite = sprite
+	newTemplate.angle = angle
 	newTemplate.heightmap = heightmap
 	newTemplate.widthmap = widthmap
 
@@ -22,19 +23,15 @@ function Tile.create(template, xpos, ypos, flipx, flipy, priority, layer1, layer
 	newTile.sprite = template.sprite
 	newTile.heightmap = template.heightmap or {}
 	newTile.widthmap = template.widthmap or {}
-	newTile.angle = newTile.heightmap.angle or 0
-	newTile.angleWall = newTile.widthmap.angle or 90
+	newTile.angle = template.angle or 0
 	if flipx then
 		newTile.angle = - newTile.angle
-		newTile.angleWall = - newTile.angleWall
 	end
 	if flipy then
         if (newTile.angle >= 0) then
             newTile.angle = 180 - newTile.angle
-            newTile.angleWall = 180 - newTile.angleWall
         else
             newTile.angle = - 180 - newTile.angle
-            newTile.angleWall = - 180 - newTile.angleWall
         end
 	end
 	newTile.flipx = flipx or false

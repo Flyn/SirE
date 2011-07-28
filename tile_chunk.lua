@@ -28,7 +28,7 @@ function TileChunk.create(w, h)
 	return newTileChunk
 end
 
-function TileChunk.autoCreate(tileImage, xmin, ymin, width, height, heightmap, priority, layer1, layer2)
+function TileChunk.autoCreate(tileImage, xmin, ymin, width, height, angle, heightmap, priority, layer1, layer2)
 	local newTileChunk = TileChunk.create(width, height)
 	
 	for x=0, width-1 do
@@ -36,7 +36,7 @@ function TileChunk.autoCreate(tileImage, xmin, ymin, width, height, heightmap, p
 		local tilespr = TileSprite.create(tileImage, (xmin+x)*16, (ymin+y)*16, 16, 16)
 		local temptile = Tile.createTemplate(tilespr)
 		if y==0 then
-			temptile = Tile.createTemplate(tilespr, heightmap)
+			temptile = Tile.createTemplate(tilespr, angle, heightmap)
 		end
 		newTileChunk:setTile(x, y, temptile, nil, nil, priority, layer1, layer2)
 		end

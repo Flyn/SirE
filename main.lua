@@ -163,12 +163,16 @@ function love.draw()
         for priority, tiles in ipairs(level.tiles) do
 			for i,tile in ipairs(tiles) do
 				for i = 0, (tile.width-1) do
-					love.graphics.setColor(0,0,255)
-					gameCamera:point(tile.xpos+i, tile:getAbsoluteHeight(tile.xpos+i))
-					love.graphics.setColor(0,255,0)
-					gameCamera:point(tile:getAbsoluteWidth(tile.ypos+i), tile.ypos+i)
-					love.graphics.setColor(255,255,255)
-				end
+                    if tile.heightmap.heights then
+                        love.graphics.setColor(0,0,255)
+                        gameCamera:point(tile.xpos+i, tile:getAbsoluteHeight(tile.xpos+i))
+                    end
+                    if tile.widthmap.heights then
+                        love.graphics.setColor(0,255,0)
+                        gameCamera:point(tile:getAbsoluteWidth(tile.ypos+i), tile.ypos+i)
+                    end
+                    love.graphics.setColor(255,255,255)
+                end
 			end
 		end
     else

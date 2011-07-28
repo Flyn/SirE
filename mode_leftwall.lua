@@ -135,7 +135,7 @@ function ModeLeftWall:checkForGround(tiles)
 			if not minY then minY = tilexpos end
 			if (tilexpos >= minY) then
 				minY = tilexpos
-				self.character.angle = tile.angleWall
+				self.character.angle = tile.angle
 			end
 			self.character.xpos = minY + (self.character.height/2)
 		end
@@ -143,7 +143,7 @@ function ModeLeftWall:checkForGround(tiles)
 			if not minY then minY = tilexpos2 end
 			if (tilexpos2 >= minY) then
 				minY = tilexpos2
-				self.character.angle = tile.angleWall
+				self.character.angle = tile.angle
 			end
 			self.character.xpos = minY + (self.character.height/2)
 		end

@@ -9,9 +9,9 @@ function Level3:createTiles()
 	tileImg:setFilter("nearest","nearest")
 	self.tilesetBatch = {love.graphics.newSpriteBatch(tileImg, 150)}
 		
-	local defaulthm = TileHeightmap.create({5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5}, 0)
+	local defaulthm = TileHeightmap.create({5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5})
 	
-	local basic_chunk = TileChunk.autoCreate(tileImg, 0, 0, 2, 3, defaulthm)
+	local basic_chunk = TileChunk.autoCreate(tileImg, 0, 0, 2, 3, 0, defaulthm)
 
 	self.chunks[11][6] = basic_chunk
 	self.chunks[22][7] = basic_chunk
