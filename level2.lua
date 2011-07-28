@@ -1,5 +1,6 @@
 require "level"
 require "layer_trigger"
+require "speed_trigger"
 Level2 = Level:create()
 
 Level2.title = "Wall Level"
@@ -66,7 +67,7 @@ function Level2:createTiles()
 	slope_chunk2:setTile(3, 1, slope_3_2, false, true, 2)
 	slope_chunk2:setTile(3, 0, slope_3_3, false, true, 2)
 	
-	self.chunks[16][12] = slope_chunk2
+	self.chunks[16][13] = slope_chunk2
 	
 	rwall_chunk = TileChunk.create(4, 5)
 	for x = 0,4 do
@@ -86,10 +87,10 @@ function Level2:createTiles()
 		end
 	end
 	
-	self.chunks[20][7] = ceil_chunk
-	self.chunks[16][7] = ceil_chunk
-	self.chunks[12][7] = ceil_chunk
-	self.chunks[8][7] = ceil_chunk
+	self.chunks[20][8] = ceil_chunk
+	self.chunks[16][8] = ceil_chunk
+	self.chunks[12][8] = ceil_chunk
+	self.chunks[8][8] = ceil_chunk
 	
 	slope_chunk3 = TileChunk.create(4, 4)
 	
@@ -102,7 +103,7 @@ function Level2:createTiles()
 	slope_chunk3:setTile(0, 1, slope_3_2, true, true, 1, false, true)
 	slope_chunk3:setTile(0, 0, slope_3_3, true, true, 1, false, true)
 	
-	self.chunks[11][12] = slope_chunk3
+	self.chunks[12][13] = slope_chunk3
 	
 	lwall_chunk = TileChunk.create(4, 5)
 	for x = 0,4 do
@@ -112,9 +113,9 @@ function Level2:createTiles()
 	end
 	
 	--self.chunks[7][2] = lwall_chunk
-	self.chunks[7][7] = lwall_chunk
-	self.chunks[7][11] = lwall_chunk
-	self.chunks[7][16] = lwall_chunk
+	self.chunks[8][7] = lwall_chunk
+	self.chunks[8][11] = lwall_chunk
+	self.chunks[8][16] = lwall_chunk
 	
 	slope_chunk4 = TileChunk.create(4, 4)
 	
@@ -127,7 +128,7 @@ function Level2:createTiles()
 	slope_chunk4:setTile(0, 2, slope_3_2, true, false, 1, false, true)
 	slope_chunk4:setTile(0, 3, slope_3_3, true, false, 1, false, true)
 	
-	self.chunks[11][17] = slope_chunk4
+	self.chunks[12][17] = slope_chunk4
 	
 end
 
@@ -140,9 +141,13 @@ function Level2:createObjects()
 	
 	self.triggers = {}
 	
-	local layertrigger = LayerTrigger.create(14*16, 11*16, 16, 64, 2, 1)
+    local layertrigger = LayerTrigger.create(14*16+15, 12*16, 2, 64, 2, 1)
 	layertrigger:setTarget(mainChar)
 	table.insert(self.triggers, layertrigger)
+	
+    local speedtrigger = SpeedTrigger.create(22*16, 19*16, 16, 16, 10)
+	speedtrigger:setTarget(mainChar)
+	table.insert(self.triggers, speedtrigger)
 end
 
 function Level2:populateLevel()
