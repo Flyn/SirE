@@ -1,13 +1,15 @@
 require "mixin"
 Tile = Mixin:create()
 
-function Tile.createTemplate(sprite, angle, heightmap, widthmap)
+function Tile.createTemplate(sprite, angle, heightmap)
 	local newTemplate = {}
 	
 	newTemplate.sprite = sprite
 	newTemplate.angle = angle
 	newTemplate.heightmap = heightmap
-	newTemplate.widthmap = widthmap
+    if heightmap then
+        newTemplate.widthmap = newTemplate.heightmap:getWidthmap()
+    end
 
 	return newTemplate
 end

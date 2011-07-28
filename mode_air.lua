@@ -74,8 +74,20 @@ function ModeAir:checkForCeiling(tiles)
 			local touchCeiling1 = ceilingSensorBar1:isColliding(tile)
 			local touchCeiling2 = ceilingSensorBar2:isColliding(tile)
 			if(touchCeiling1 or touchCeiling2) then
-					self.character.ypos = tile.ypos + tile.height + 1 + (self.character.height/2)
-	                self.character.yspd = 0
+                if (tile.angle > 90 and tile.angle <= 135) then
+                    self.character.mode = self.character.modeRightWall
+                    self.character.angle = tile.angle
+                    self.character.grndspd = math.max(2,self.character.yspd)*-math.getSign(self.character.yspd*math.cos(math.rad(self.character.angle)))
+                    print(self.character.grndspd)
+                elseif (tile.angle < -90 and tile.angle >= -135) then
+                    self.character.mode = self.character.modeLeftWall
+                    self.character.angle = tile.angle
+                    self.character.grndspd = math.max(2,self.character.yspd)*-math.getSign(self.character.yspd*math.cos(math.rad(self.character.angle)))
+                    print(self.character.grndspd)
+                else
+                    self.character.ypos = tile.ypos + tile.height + 1 + (self.character.height/2)
+                    self.character.yspd = 0
+                end
 			end
 			touchCeiling = touchCeiling or touchCeiling1 or touchCeiling2
 		end

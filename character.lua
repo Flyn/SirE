@@ -94,9 +94,9 @@ end
 function Character:physicsStep(tiles)
 	self.mode:updatePos()
     self:isBumpingTiles(tiles[self.layer])
-    if self.mode == self.modeAir then
-        self.mode:checkForCeiling(tiles[self.layer])
-    end
+	if self.mode == self.modeAir then
+		self.mode:checkForCeiling(tiles[self.layer])
+	end
     self.mode:checkForGround(tiles[self.layer])
 end
 

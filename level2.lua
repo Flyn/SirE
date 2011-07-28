@@ -11,10 +11,10 @@ function Level2:createTiles()
 	self.tilesetBatch = {love.graphics.newSpriteBatch(tileImg, 400), love.graphics.newSpriteBatch(tileImg, 400)}
 	
 	local floorhm = TileHeightmap.create({15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15})
-	
+
 	local floor_chunk = TileChunk.create(5, 6)
     
-    floor_top = Tile.createTemplate(TileSprite.create(tileImg, 16, 0, 16, 16), 0, floorhm, TileHeightmap.create({16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}))
+    floor_top = Tile.createTemplate(TileSprite.create(tileImg, 16, 0, 16, 16), 0, floorhm)
     floor_body = Tile.createTemplate(TileSprite.create(tileImg, 16, 16, 16, 16))
     
     for x = 0,4 do
@@ -37,11 +37,11 @@ function Level2:createTiles()
     
 	slope_0_3 = Tile.createTemplate(TileSprite.create(tileImg, 16*0, 16*3, 16, 16), 6, TileHeightmap.create({15,15,15,15,15,15,15,15,15,15,14,14,14,14,13,13}))
 	slope_1_3 = Tile.createTemplate(TileSprite.create(tileImg, 16*1, 16*3, 16, 16), 23, TileHeightmap.create({13,13,12,12,12,11,11,11,10,10, 9, 9, 8, 8, 7, 7}))
-	slope_2_2 = Tile.createTemplate(TileSprite.create(tileImg, 16*2, 16*2, 16, 16), 45, TileHeightmap.create({16,16,16,16,16,16,16,16,16,16,16,15,14,13,12,11}),TileHeightmap.create({16,16,16,16,16,16,16,16,16,16,15,14,13,12,11,10}))
+	slope_2_2 = Tile.createTemplate(TileSprite.create(tileImg, 16*2, 16*2, 16, 16), 45, TileHeightmap.create({16,16,16,16,16,16,16,16,16,16,16,15,14,13,12,11}))
 	slope_2_3 = Tile.createTemplate(TileSprite.create(tileImg, 16*2, 16*3, 16, 16), 34, TileHeightmap.create({ 6, 6, 5, 4, 4, 4, 3, 2, 2, 1, 0, 0, 0, 0, 0, 0}))
-	slope_3_0 = Tile.createTemplate(TileSprite.create(tileImg, 16*3, 0, 16, 16), 84, TileHeightmap.create({16,16,16,16,16,16,16,16,16,16,16,16,16,14,10, 0}),TileHeightmap.create({15,15,15,15,15,15,15,15,14,14,14,14,14,13,13,13}))
-	slope_3_1 = Tile.createTemplate(TileSprite.create(tileImg, 16*3, 16, 16, 16), 68, TileHeightmap.create({16,16,16,16,16,16,16,14,12,10, 8, 6, 3, 0, 0, 0}),TileHeightmap.create({13,13,12,12,12,11,11,11,10,10, 9, 9, 8, 8, 7, 7}))
-	slope_3_2 = Tile.createTemplate(TileSprite.create(tileImg, 16*3, 16*2, 16, 16), 56, TileHeightmap.create({11,10, 8, 7, 5, 4, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0}),TileHeightmap.create({ 7, 7, 6, 5, 5, 4, 3, 2, 2, 1, 0, 0, 0, 0, 0, 0}))
+	slope_3_0 = Tile.createTemplate(TileSprite.create(tileImg, 16*3, 0, 16, 16), 84, TileHeightmap.create({16,16,16,16,16,16,16,16,16,16,16,16,16,14,10, 0}))
+	slope_3_1 = Tile.createTemplate(TileSprite.create(tileImg, 16*3, 16, 16, 16), 68, TileHeightmap.create({16,16,16,16,16,16,16,14,12,10, 8, 6, 3, 0, 0, 0}))
+	slope_3_2 = Tile.createTemplate(TileSprite.create(tileImg, 16*3, 16*2, 16, 16), 56, TileHeightmap.create({11,10, 8, 7, 5, 4, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0}))
 	slope_3_3 = Tile.createTemplate(TileSprite.create(tileImg, 16*3, 16*3, 16, 16))
 	
 	slope_chunk:setTile(0, 3, slope_0_3, nil, nil, 2)
