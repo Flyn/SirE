@@ -21,7 +21,7 @@ function love.load()
 
 	level = levels[1]
     
-    hud = true
+    hud = 1
     buffer = 0
     speed = 60
     
@@ -117,7 +117,7 @@ function love.keypressed(key)
 		level.mainChar.xspd = level.mainChar.mode.maxspd * level.mainChar.facing
 	end
 	if key == "h" then
-        hud = not hud
+        hud = (hud+1)%4
 	end
 end
 
@@ -149,8 +149,8 @@ function love.draw()
 	
 	love.graphics.scale(1/gameCamera:getZoomedRatio())
     
-	if hud then
-        love.graphics.print("Physics demo\n"..level.title.." Speed: "..speed.." FPS: "..love.timer.getFPS().."\nF1 to switch levels, R to reload level".."\nLeft/Right to move\nLeft click to spawn player\nRight Click to zoom\nEscape to quit", 0, 0)
+	if hud == 2 then
+        love.graphics.print("Physics demo\n"..level.title.." Speed: "..speed.." FPS: "..love.timer.getFPS(), 0, 0)
         love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nMode:"..level.mainChar.mode.name.."\nAngle:"..level.mainChar.angle, 200, 0)
         love.graphics.print("XSpeed:"..level.mainChar.xspd.."\nYSpeed:"..level.mainChar.yspd, 400, 0)
         
@@ -183,7 +183,9 @@ function love.draw()
                 end
 			end
 		end
-    else
-		love.graphics.print("FPS: "..love.timer.getFPS(), 0, 0)
+    elseif hud == 1 then
+		love.graphics.print("Physics demo\n"..level.title.." Speed: "..speed.." FPS: "..love.timer.getFPS().."\nF1 to switch levels, R to reload level".."\nLeft/Right to move, Down to roll, Space to jump\nLeft click to spawn player\nMouse Wheel to zoom\nRight Click to reset zoom\nH to switch HUD, Escape to quit", 0, 0)
+    elseif hud == 3 then
+    	love.graphics.print("FPS: "..love.timer.getFPS(), 0, 0)
     end
 end
