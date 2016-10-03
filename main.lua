@@ -13,22 +13,22 @@ end
 function love.load()
 	-- Loads default font
 	love.graphics.setFont(love.graphics.newFont(10))
-	
+
 	-- Initialize levels
 	levels = {Level1, Level2, Level3}
 	levels[1]:init()
 	levels[2]:init()
     levels[3]:init()
-	
+
 	levelnum = 0
 
 	level = levels[1]
-    
+
     hud = 1
     buffer = 0
     -- We want 60 engine frames per second
     speed = 60
-    
+
     -- The camera must simulate the resolution from Sonic games
     gameCamera = Camera.create(320, 224, love.graphics.getWidth(), love.graphics.getHeight())
     gameCamera.leftBorder = 144
@@ -41,12 +41,12 @@ end
 function love.update(dt)
 
     local rate = 1/speed
-    
+
     -- If delta is too strong we won't take it into account
     if dt < 0.1 then
         buffer = buffer + dt
     end
-    
+
     -- If rendering is too fast we skip the engine step
     if (buffer>=rate) then
 
@@ -58,7 +58,7 @@ function love.update(dt)
 	            level.mainChar:moveRight()
 	        end
 	        if love.keyboard.isDown("down") then
-	            level.mainChar:roll()	
+	            level.mainChar:roll()
 	        end
 	        if love.keyboard.isDown("escape") then
 	            os.exit(0)
@@ -69,21 +69,21 @@ function love.update(dt)
 	        if love.keyboard.isDown("kp-") then
 	            speed = speed-1
 	        end
-	        
+
 	        speed = math.max(10, speed)
 	        speed = math.min(600, speed)
-	        
+
 	        -- Engine physics step
 	        level.mainChar:physicsStep(level.tileCollisions)
 	        -- Checking triggers
 	        level.mainChar:triggerObjects(level.triggers)
-	    
+
 	    end
 	    -- Updating the character's sprite animation
 	    level.mainChar:updateSprite(1/60)
-        
+
         local yOffset = 0
-	
+
         -- When rolling, the character is 5 pixels shorter
         if level.mainChar.rolling then yOffset = -5 end
 
@@ -93,11 +93,11 @@ function love.update(dt)
             gameCamera:moveToward(nil, level.mainChar.ypos+yOffset)
             gameCamera:follow(level.mainChar.xpos, nil)
         end
-	    
+
 	    buffer = 0
-    
+
     end
-    
+
     -- Just for the lulz we put an elastic wall to the far left of the level
     if (level.mainChar.xpos < 0) then
 		level.mainChar.xpos = 0
@@ -105,14 +105,14 @@ function love.update(dt)
 		level.mainChar.grndspd = 10
 		level.mainChar.facing = 1
     end
-    
+
     -- Generating the spritebatchs etc.
     level:preRendering()
 
 end
 
 function love.keypressed(key)
-	if key == " " then
+	if key == "space" then
 		level.mainChar:jump()
 	end
 	if key == "d" then
@@ -141,18 +141,21 @@ function love.keyreleased(key)
 end
 
 function love.mousereleased(x, y, button)
-    if button == "r" then
-        gameCamera.zoom = 1
-    end
-    if button == "wd" then
-        gameCamera.zoom = gameCamera.zoom-0.1
-    end
-    if button == "wu" then
-        gameCamera.zoom = gameCamera.zoom+0.1
-    end
-	if button == "l" then
+  if button == 2 then
+      gameCamera.zoom = 1
+  end
+	if button == 1 then
 		level.mainChar.xpos, level.mainChar.ypos = gameCamera:windowToWorld(x, y)
 	end
+end
+
+function love.wheelmoved(x, y)
+    if y < 0 then
+        gameCamera.zoom = gameCamera.zoom-0.1
+    end
+    if y > 0 then
+        gameCamera.zoom = gameCamera.zoom+0.1
+    end
 end
 
 -- Drawing operations
@@ -161,22 +164,22 @@ function love.draw()
 	love.graphics.scale(gameCamera:getZoomedRatio())
 
 	level:render()
-	
+
 	-- We unscale for the hud to be the same
 	love.graphics.scale(1/gameCamera:getZoomedRatio())
-    
+
 	if hud == 2 then
         love.graphics.print("Physics demo\n"..level.title.." Speed: "..speed.." FPS: "..love.timer.getFPS(), 0, 0)
         love.graphics.print("Speed:"..level.mainChar.grndspd.."\nXpos:"..level.mainChar.xpos.."\nYpos:"..level.mainChar.ypos.."\nMode:"..level.mainChar.mode.name.."\nAngle:"..level.mainChar.angle, 200, 0)
         love.graphics.print("XSpeed:"..level.mainChar.xspd.."\nYSpeed:"..level.mainChar.yspd, 400, 0)
-        
+
         love.graphics.scale(gameCamera:getZoomedRatio())
-        
+
 		love.graphics.setColor(0,255,0)
         gameCamera:point(level.mainChar.xpos, level.mainChar.ypos+4)
         love.graphics.setColor(255,255,255)
-        
-        -- 
+
+        --
         if level.triggers then
             for i,trigger in ipairs(level.triggers) do
                 love.graphics.setColor(0,255,255,60)
@@ -184,7 +187,7 @@ function love.draw()
                 love.graphics.setColor(255,255,255,255)
             end
         end
-        
+
         for priority, tiles in ipairs(level.tiles) do
 			for i,tile in ipairs(tiles) do
 				for i = 0, (tile.width-1) do

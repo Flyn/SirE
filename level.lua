@@ -12,7 +12,7 @@ function Level:init()
 	for i=1,50 do
 		self.chunks[i]={}
 	end
-	
+
 	self:createTiles()
 	self:generateTiles()
 	self:createObjects()
@@ -20,7 +20,7 @@ function Level:init()
 end
 
 function Level:createTiles()
-        
+
 end
 
 function Level:generateTiles()
@@ -45,7 +45,7 @@ function Level:generateTiles()
 			end
 		end
     end
-    
+
     self.chunks = nil
 end
 
@@ -66,17 +66,17 @@ function Level:preRendering()
     if self.tilesetBatch then
 		for priority, batch in pairs(self.tilesetBatch) do
 	        batch:clear()
-	    
+
 	        for i,tile in pairs(self.tiles[priority]) do
-	        
+
 				local scalex = 1
 				local scaley = 1
 				if tile.flipx then scalex = -1 end
 				if tile.flipy then scaley = -1 end
-	        
+
 				if (tile.xpos >= gameCamera.xpos-20 and tile.xpos < gameCamera.xpos+gameCamera:getZoomedWidth()+20)
 				and (tile.ypos >= gameCamera.ypos-20 and tile.ypos < gameCamera.ypos+gameCamera:getZoomedHeight()+20) then
-					batch:addq(tile.sprite.quad, tile.xpos+tile.width/2, tile.ypos+tile.height/2, nil, scalex, scaley, tile.width/2, tile.height/2)
+					batch:add(tile.sprite.quad, tile.xpos+tile.width/2, tile.ypos+tile.height/2, nil, scalex, scaley, tile.width/2, tile.height/2)
 	            end
 	        end
         end
@@ -96,7 +96,7 @@ function Level:render()
     for i,object in ipairs(self.objects) do
 		object:renderSprite()
     end
-    
+
     if self.tilesetBatch then
 		if self.tilesetBatch[2] then
 			gameCamera:draw(self.tilesetBatch[2])

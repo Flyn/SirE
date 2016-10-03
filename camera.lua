@@ -8,7 +8,7 @@ Camera.zoom = 1
 function Camera.create(width, height, winWidth, winHeight)
 	local newCamera = {}
 	Camera:mixin(newCamera)
-	
+
 	newCamera.width 	= width
 	newCamera.height 	= height
 	newCamera.winWidth 	= winWidth
@@ -17,10 +17,10 @@ function Camera.create(width, height, winWidth, winHeight)
 	newCamera.rightBorder = width/2
 	newCamera.topBorder = height/2
 	newCamera.bottomBorder = height/2
-	
+
 	local ratiox = math.max(width/winWidth, winWidth/width)
 	local ratioy = math.max(height/winHeight, winHeight/height)
-	
+
 	newCamera.ratio = math.min(ratiox, ratioy)
 
 	return newCamera
@@ -49,7 +49,7 @@ function Camera:centerOn(x, y)
     if y then
         self.ypos = y - (self.height/self.zoom) / 2
     end
-	
+
 	if self.xpos < 0 then self.xpos = 0 end
 	if self.ypos < 0 then self.ypos = 0 end
 end
@@ -106,7 +106,7 @@ end
 function Camera:point(x, y, ...)
 	x = x or 0
 	y = y or 0
-	love.graphics.point(x - self.xpos, y - self.ypos, ...)
+	love.graphics.points(x - self.xpos, y - self.ypos, ...)
 end
 
 function Camera:rectangle(x, y, ...)
