@@ -16,4 +16,4 @@ It doesn't have much comments yet, but hey, maybe I'll add some.
 Just type "love __installdirectory__" and it should do the rest.
 
 ## Author
-Flyn (@flynscape)
+Flyn
